@@ -1,6 +1,8 @@
 from flask import Flask, render_template
+from flask_moment import Moment
 
 app = Flask(__name__)
+moment = Moment(app)
 
 
 @app.route('/')
