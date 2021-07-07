@@ -3,7 +3,16 @@
 {% block title %}bookorganizer - Home page{% endblock %}
 
 {% block content %}
-<h1 class="display-1">Hello, World!</h1>
+<h1 class="display-1">Hello, {% if name %}{{ name }}{% else %}guest{% endif %}!</h1>
+
+<form method="post">
+    {{ form.csrf_token }}
+
+    <div class="mb-3">
+        {{ form.name.label(class='form-label') }} {{ form.name(class='form-control') }}
+    </div>
+    {{ form.submit(class='btn btn-primary mb-3') }}
+</form>
 
 <p>
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut bibendum quam, id mollis lorem. Nullam vehicula vel
