@@ -12,11 +12,12 @@
     <!-- Moment.js -->
     {{ moment.include_moment() }}
 
+    <!-- Page title block -->
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
     <div class="container-fluid">
         <a class="navbar-brand" href={{ url_for('index') }}>bookorganizer</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -36,10 +37,20 @@
     </div>
 </nav>
 
-<!-- Content -->
+<!-- Content container -->
 <div class="container">
+    <!-- Flash messages -->
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+
+    <!-- Page content block -->
     {% block content %}{% endblock %}
 
+    <!-- Current date and time -->
     <hr>
     <p>Current date and time: {{ moment().format('LLL') }}.</p>
 </div>
