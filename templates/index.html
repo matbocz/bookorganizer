@@ -4,7 +4,11 @@
 
 {% block content %}
 <h1 class="display-1">Hello, {% if name %}{{ name }}{% else %}guest{% endif %}!</h1>
-
+{% if not known %}
+<p>Nice to meet you!</p>
+{% else %}
+<p>Nice to see you again!</p>
+{% endif %}
 <form method="post">
     {{ form.csrf_token }}
 
