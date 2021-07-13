@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask, render_template, session, redirect, url_for, flash
-from flask_mail import Mail
+from flask_mail import Mail, Message
 from flask_migrate import Migrate
 from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
@@ -11,9 +11,18 @@ from wtforms.validators import DataRequired
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
+
+# App configuration
 app.config['SECRET_KEY'] = 'TEST_SECRET_KEY'
+app.config['BOOKORGANIZER_ADMIN'] = os.environ.get('BOOKORGANIZER_ADMIN')
+
+# SQLAlchemy configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Mail configuration
+app.config['BOOKORGANIZER_MAIL_SUBJECT_PREFIX'] = '[Bookorganizer]'
+app.config['BOOKORGANIZER_MAIL_SENDER'] = 'Bookorganizer Admin <bookorganizer.matbocz@gmail.com>'
 
 # GMail configuration
 app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
@@ -26,6 +35,15 @@ moment = Moment(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 mail = Mail(app)
+
+
+def send_email(to, subject, template, **kwargs):
+    msg = Message(subject=app.config['BOOKORGANIZER_MAIL_SUBJECT_PREFIX'] + subject,
+                  sender=app.config['BOOKORGANIZER_MAIL_SENDER'],
+                  recipients=[to])
+    msg.body = render_template(template + '.txt', **kwargs)
+    msg.html = render_template(template + '.html', **kwargs)
+    mail.send(msg)
 
 
 class Role(db.Model):
@@ -66,6 +84,8 @@ def index():
             db.session.commit()
             session['known'] = False
             flash("You created a new user!")
+            if app.config['BOOKORGANIZER_ADMIN']:
+                send_email(app.config['BOOKORGANIZER_ADMIN'], 'New user', 'mail/new_user', user=user)
         else:
             session['known'] = True
 
