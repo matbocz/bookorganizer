@@ -1,22 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}bookorganizer - Home page{% endblock %}
+{% block title %}Bookorganizer - Home page{% endblock %}
 
 {% block content %}
-<h1 class="display-1">Hello, {% if name %}{{ name }}{% else %}guest{% endif %}!</h1>
-{% if not known %}
-<p>Nice to meet you!</p>
-{% else %}
-<p>Nice to see you again!</p>
-{% endif %}
-<form method="post">
-    {{ form.csrf_token }}
-
-    <div class="mb-3">
-        {{ form.name.label(class='form-label') }} {{ form.name(class='form-control') }}
-    </div>
-    {{ form.submit(class='btn btn-primary mb-3') }}
-</form>
+<h1 class="display-1 mb-3">
+    Hello,
+    {% if current_user.is_authenticated %}
+    {{ current_user.username }}
+    {% else %}
+    guest
+    {% endif %}
+</h1>
 
 <p>
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut bibendum quam, id mollis lorem. Nullam vehicula vel
