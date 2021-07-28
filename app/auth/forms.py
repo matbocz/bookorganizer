@@ -6,9 +6,17 @@ from app.models import User
 
 
 class LoginForm(FlaskForm):
-    email = StringField('E-mail', validators=[DataRequired(), Length(1, 64), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
+    email = StringField('E-mail',
+                        validators=[DataRequired(message='Email is required.'),
+                                    Length(min=3, max=64,
+                                           message='Email must be between 3 and 64 characters long.'),
+                                    Email(message='Email must be valid.')])
+    password = PasswordField('Password',
+                             validators=[DataRequired(message='Password is required.'),
+                                         Length(min=10, max=64,
+                                                message='Password must be between 10 and 64 characters long.')])
     remember_me = BooleanField('Remember me')
+
     submit = SubmitField('Log in')
 
 
