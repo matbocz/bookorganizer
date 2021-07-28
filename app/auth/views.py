@@ -14,11 +14,15 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user is not None and user.verify_password(form.password.data):
             login_user(user=user, remember=form.remember_me.data)
-            next = request.args.get('next')
-            if next is None or not next.startswith('/'):
-                next = url_for('main.index')
-            return redirect(next)
+
+            next_url = request.args.get('next')
+            if next_url is None or not next_url.startswith('/'):
+                next_url = url_for('main.index')
+
+            return redirect(next_url)
+
         flash('Invalid username or password.')
+
     return render_template('auth/login.html', form=form)
 
 
