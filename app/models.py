@@ -17,6 +17,24 @@ class Role(db.Model):
     # Relationships
     users = db.relationship('User', backref='role', lazy='dynamic')
 
+    # Add permission to Role
+    def add_permission(self, perm):
+        if not self.has_permission(perm):
+            self.permissions += perm
+
+    # Remove permission from Role
+    def remove_permission(self, perm):
+        if self.has_permission(perm):
+            self.permissions -= perm
+
+    # Reset Role permissions
+    def reset_permissions(self):
+        self.permissions = 0
+
+    # Check Role permission
+    def has_permission(self, perm):
+        return self.permissions & perm == perm
+
     def __repr__(self):
         return '<Role %r>' % self.name
 
