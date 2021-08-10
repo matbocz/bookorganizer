@@ -35,6 +35,35 @@ class Role(db.Model):
     def has_permission(self, perm):
         return self.permissions & perm == perm
 
+    @staticmethod
+    def insert_roles():
+        roles = {
+            'User': [Permission.Organize],
+            'Administrator': [Permission.Organize, Permission.Admin],
+        }
+        default_role = 'User'
+
+        for role_name in roles:
+            # Look for role in database
+            role = Role.query.filter_by(name=role_name).first()
+
+            # Create role if not in database
+            if role is None:
+                role = Role(name=role_name)
+
+            # Reset role permissions
+            role.reset_permissions()
+
+            # Add permissions to role
+            for perm in roles[role_name]:
+                role.add_permission(perm)
+
+            # Set default role
+            role.default = (role.name == default_role)
+
+            db.session.add(role)
+        db.session.commit()
+
     def __init__(self, **kwargs):
         super(Role, self).__init__(**kwargs)
 
