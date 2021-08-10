@@ -45,6 +45,11 @@ class Role(db.Model):
         return '<Role %r>' % self.name
 
 
+class Permission:
+    Organize = 1
+    Admin = 2
+
+
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
 
