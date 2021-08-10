@@ -35,6 +35,12 @@ class Role(db.Model):
     def has_permission(self, perm):
         return self.permissions & perm == perm
 
+    def __init__(self, **kwargs):
+        super(Role, self).__init__(**kwargs)
+
+        if self.permissions is None:
+            self.permissions = 0
+
     def __repr__(self):
         return '<Role %r>' % self.name
 
