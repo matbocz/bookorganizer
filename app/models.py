@@ -110,7 +110,7 @@ class User(UserMixin, db.Model):
     def can(self, perm):
         return self.role is not None and self.role.has_permission(perm)
 
-    # Check if user is administrator
+    # Check if User is administrator
     def is_administrator(self):
         return self.can(Permission.Admin)
 
