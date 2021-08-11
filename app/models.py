@@ -106,6 +106,14 @@ class User(UserMixin, db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    # Check User permission
+    def can(self, perm):
+        return self.role is not None and self.role.has_permission(perm)
+
+    # Check if user is administrator
+    def is_administrator(self):
+        return self.can(Permission.Admin)
+
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
 
