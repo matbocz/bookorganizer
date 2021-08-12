@@ -121,6 +121,12 @@ class User(UserMixin, db.Model):
     def is_administrator(self):
         return self.can(Permission.Admin)
 
+    # Refresh User last seen date
+    def ping(self):
+        self.last_seen = datetime.utcnow()
+        db.session.add(self)
+        db.session.commit()
+
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
 
