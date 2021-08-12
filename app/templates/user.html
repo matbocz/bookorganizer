@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Bookorganizer - {{ user.username }}{% endblock %}
+
+{% block content %}
+<!-- Username -->
+<h1 class="display-1 mb-3">{{ user.username }}</h1>
+
+<!-- Name and Location -->
+{% if user.name or user.location %}
+<p>
+    {% if user.name %}{{ user.name }}{% endif %}
+    {% if user.location %}
+    <a href="https://maps.google.com/?q={{ user.location }}">
+        {{ user.location }}
+    </a>
+    {% endif %}
+</p>
+{% endif %}
+
+<!-- Email (if current user is administrator) -->
+{% if current_user.is_administrator() %}
+<p>
+    <a href="mailto:{{ user.email }}">
+        {{ user.email }}
+    </a>
+</p>
+{% endif %}
+
+<!-- About me -->
+{% if user.about_me %}
+<p>
+    {{ user.about_me }}
+</p>
+{% endif %}
+
+<!-- Registration date and Last seen -->
+<p>
+    Registration date: {{ moment(user.member_since).format('L') }}
+    Last seen: {{ moment(user.last_seen).fromNow() }}
+</p>
+{% endblock %}
