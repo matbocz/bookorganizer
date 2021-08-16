@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Bookorganizer - Edit Profile [Admin] page{% endblock %}
+
+{% block content %}
+<h1 class="display-1 mb-3">Edit Profile [Admin]</h1>
+
+<form method="post">
+    {{ form.csrf_token }}
+
+    <!-- E-mail -->
+    <div class="mb-3">
+        {{ form.email.label(class='form-label') }} {{ form.email(class='form-control') }}
+
+        <ul>
+            {% for error in form.email.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Username -->
+    <div class="mb-3">
+        {{ form.username.label(class='form-label') }} {{ form.username(class='form-control') }}
+
+        <ul>
+            {% for error in form.username.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Role -->
+    <div class="mb-3">
+        {{ form.role.label(class='form-label') }} {{ form.role(class='form-select') }}
+
+        <ul>
+            {% for error in form.role.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Name -->
+    <div class="mb-3">
+        {{ form.name.label(class='form-label') }} {{ form.name(class='form-control') }}
+
+        <ul>
+            {% for error in form.name.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Location -->
+    <div class="mb-3">
+        {{ form.location.label(class='form-label') }} {{ form.location(class='form-control') }}
+
+        <ul>
+            {% for error in form.location.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- About me -->
+    <div class="mb-3">
+        {{ form.about_me.label(class='form-label') }} {{ form.about_me(class='form-control') }}
+
+        <ul>
+            {% for error in form.about_me.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Submit button -->
+    {{ form.submit(class='btn btn-primary') }}
+</form>
+{% endblock %}
