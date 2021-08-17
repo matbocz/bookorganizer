@@ -1,10 +1,16 @@
 from flask import render_template, request, url_for, redirect, flash
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, login_required, logout_user, current_user
 
 from . import auth
 from .forms import LoginForm, RegistrationForm
 from .. import db
 from ..models import User
+
+
+@auth.before_app_request
+def before_request():
+    if current_user.is_authenticated:
+        current_user.ping()
 
 
 @auth.route('/login', methods=['GET', 'POST'])
