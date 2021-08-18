@@ -5,6 +5,19 @@ from wtforms.validators import Length, DataRequired, Email, Regexp, ValidationEr
 from app.models import Role, User
 
 
+class AddBookForm(FlaskForm):
+    title = StringField('Title',
+                        validators=[DataRequired(message='Title is required.'),
+                                    Length(min=1, max=64,
+                                           message='Title must be between 1 and 64 characters long.')])
+    author = StringField('Author',
+                         validators=[Length(min=0, max=64,
+                                            message='Author must be between 0 and 64 characters long.')])
+    description = TextAreaField('Description')
+
+    submit = SubmitField('Add book')
+
+
 class EditProfileForm(FlaskForm):
     name = StringField('Name',
                        validators=[Length(min=0, max=64,
