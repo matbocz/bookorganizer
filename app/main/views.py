@@ -21,6 +21,13 @@ def user(username):
     return render_template('user.html', user=user)
 
 
+@main.route('/book/<int:id>')
+def book(id):
+    book = Book.query.get_or_404(id)
+
+    return render_template('book.html', book=book)
+
+
 @main.route('/add-book', methods=['GET', 'POST'])
 @login_required
 def add_book():
