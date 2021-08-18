@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Bookorganizer - {{ book.title }}{% endblock %}
+
+{% block content %}
+<!-- Title -->
+<h1 class="display-1 mb-3">{{ book.title }}</h1>
+
+<!-- Author -->
+{% if book.author %}
+<p>
+    {{ book.author }}
+</p>
+{% endif %}
+
+<!-- Description -->
+{% if book.description %}
+<p>
+    {{ book.description }}
+</p>
+{% endif %}
+
+<!-- Date added -->
+<p>
+    Date added: {{ moment(book.date_added).format('LLL') }}
+</p>
+
+<!-- Date modified -->
+<p>
+    Date modified: {{ moment(book.date_modified).format('LLL') }}
+</p>
+{% endblock %}
