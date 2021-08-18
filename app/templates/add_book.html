@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Bookorganizer - Add Book page{% endblock %}
+
+{% block content %}
+<h1 class="display-1 mb-3">Add Book</h1>
+
+<form method="post">
+    {{ form.csrf_token }}
+
+    <!-- Title -->
+    <div class="mb-3">
+        {{ form.title.label(class='form-label') }} {{ form.title(class='form-control') }}
+
+        <ul>
+            {% for error in form.title.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Author -->
+    <div class="mb-3">
+        {{ form.author.label(class='form-label') }} {{ form.author(class='form-control') }}
+
+        <ul>
+            {% for error in form.author.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Description -->
+    <div class="mb-3">
+        {{ form.description.label(class='form-label') }} {{ form.description(class='form-control') }}
+
+        <ul>
+            {% for error in form.description.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Submit button -->
+    {{ form.submit(class='btn btn-primary') }}
+</form>
+{% endblock %}
