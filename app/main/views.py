@@ -3,10 +3,10 @@ from flask_login import login_required, current_user
 from werkzeug.utils import redirect
 
 from . import main
-from .forms import EditProfileForm, EditProfileAdminForm
+from .forms import EditProfileForm, EditProfileAdminForm, AddBookForm
 from .. import db
 from ..decorators import admin_required
-from ..models import User, Role
+from ..models import User, Role, Book
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -19,6 +19,31 @@ def user(username):
     user = User.query.filter_by(username=username).first_or_404()
 
     return render_template('user.html', user=user)
+
+
+@main.route('/add-book', methods=['GET', 'POST'])
+@login_required
+def add_book():
+    form = AddBookForm()
+    if form.validate_on_submit():
+        # Create book object
+        book = Book(title=form.title.data,
+                    author=form.author.data,
+                    description=form.description.data,
+                    owner=current_user._get_current_object())
+
+        # Send book object to database
+        db.session.add(book)
+        db.session.commit()
+
+        # Show message on page
+        flash('Book has been added.')
+
+        # Redirect to current user page
+        return redirect(url_for('.user', username=current_user.username))
+
+    # Render Add Book page
+    return render_template('add_book.html', form=form)
 
 
 @main.route('/edit-profile', methods=['GET', 'POST'])
