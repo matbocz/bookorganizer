@@ -8,6 +8,30 @@ from . import db
 from . import login_manager
 
 
+class Book(db.Model):
+    __tablename__ = 'books'
+
+    # Columns
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(64))
+    author = db.Column(db.String(64))
+    description = db.Column(db.Text())
+    date_added = db.Column(db.DateTime(), default=datetime.utcnow)
+    date_modified = db.Column(db.DateTime(), default=datetime.utcnow)
+
+    # Relationships
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    # Refresh Book modified date
+    def ping(self):
+        self.date_modified = datetime.utcnow()
+        db.session.add(self)
+        db.session.commit()
+
+    def __repr__(self):
+        return '<Book %r>' % self.title
+
+
 class Role(db.Model):
     __tablename__ = 'roles'
 
@@ -98,6 +122,7 @@ class User(UserMixin, db.Model):
 
     # Relationships
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    books = db.relationship('Book', backref='owner', lazy='dynamic')
 
     # Password getter
     @property
