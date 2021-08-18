@@ -146,6 +146,14 @@ class User(UserMixin, db.Model):
     def is_administrator(self):
         return self.can(Permission.Admin)
 
+    # Check if User is owner of specific Book
+    def is_owner(self, book):
+        for item in self.books.all():
+            if item.id == book.id:
+                return True
+
+        return False
+
     # Refresh User last seen date
     def ping(self):
         self.last_seen = datetime.utcnow()
@@ -172,6 +180,10 @@ class AnonymousUser(AnonymousUserMixin):
 
     # Check if AnonymousUser is administrator
     def is_administrator(self):
+        return False
+
+    # Check if AnonymousUser is owner of specific Book
+    def is_owner(self, book):
         return False
 
 
