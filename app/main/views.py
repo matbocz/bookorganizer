@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from werkzeug.utils import redirect
 
 from . import main
-from .forms import EditProfileForm, EditProfileAdminForm, AddBookForm
+from .forms import EditProfileForm, EditProfileAdminForm, AddBookForm, EditBookForm
 from .. import db
 from ..decorators import admin_required
 from ..models import User, Role, Book
@@ -73,6 +73,48 @@ def delete_book(id):
 
     # Show message on page
     flash(f'Book {book.title} cannot be deleted by you.')
+
+    # Redirect to selected book page
+    return redirect(url_for('.book', id=id))
+
+
+@main.route('/edit-book/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_book(id):
+    book = Book.query.get_or_404(id)
+
+    # Check if current user is owner of selected book
+    if current_user.is_owner(book):
+        form = EditBookForm()
+        if form.validate_on_submit():
+            # Update selected book data
+            book.title = form.title.data
+            book.author = form.author.data
+            book.description = form.description.data
+
+            # Send selected book data to database
+            db.session.add(book)
+            db.session.commit()
+
+            # Show message on page
+            flash('Book has been updated.')
+
+            # Refresh selected book modified date
+            book.ping()
+
+            # Redirect to selected book page
+            return redirect(url_for('.book', id=id))
+
+        # Fill out form with selected book data
+        form.title.data = book.title
+        form.author.data = book.author
+        form.description.data = book.description
+
+        # Render Edit Book page
+        return render_template('edit_book.html', form=form)
+
+    # Show message on page
+    flash('Book cannot be updated by you.')
 
     # Redirect to selected book page
     return redirect(url_for('.book', id=id))
