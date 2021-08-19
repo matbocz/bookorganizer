@@ -29,4 +29,11 @@
 <p>
     Date modified: {{ moment(book.date_modified).format('LLL') }}
 </p>
+
+<!-- Link to delete_book function -->
+{% if current_user.is_owner(book) %}
+<a class="btn btn-danger" href="{{ url_for('main.delete_book', id=book.id) }}">
+    Delete book
+</a>
+{% endif %}
 {% endblock %}
