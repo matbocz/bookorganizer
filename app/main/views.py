@@ -53,6 +53,31 @@ def add_book():
     return render_template('add_book.html', form=form)
 
 
+@main.route('/delete-book/<int:id>')
+@login_required
+def delete_book(id):
+    # Get selected book from database
+    book = Book.query.get_or_404(id)
+
+    # Check if current user is owner of selected book
+    if current_user.is_owner(book):
+        # Delete selected book from database
+        db.session.delete(book)
+        db.session.commit()
+
+        # Show message on page
+        flash(f'Book {book.title} has been deleted.')
+
+        # Redirect to current user page
+        return redirect(url_for('.user', username=current_user.username))
+
+    # Show message on page
+    flash(f'Book {book.title} cannot be deleted by you.')
+
+    # Redirect to selected book page
+    return redirect(url_for('.book', id=id))
+
+
 @main.route('/edit-profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
