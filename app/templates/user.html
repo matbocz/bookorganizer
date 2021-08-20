@@ -3,54 +3,79 @@
 {% block title %}Bookorganizer - {{ user.username }}{% endblock %}
 
 {% block content %}
-<!-- Username -->
-<h1 class="display-1 mb-3">{{ user.username }}</h1>
+<!-- User information -->
+<div class="mb-3">
+    <!-- Username -->
+    <h1 class="display-1 mb-3">{{ user.username }}</h1>
 
-<!-- Name and Location -->
-{% if user.name or user.location %}
-<p>
-    {% if user.name %}{{ user.name }}{% endif %}
-    {% if user.location %}
-    <a href="https://maps.google.com/?q={{ user.location }}">
-        {{ user.location }}
+    <!-- Name and Location -->
+    {% if user.name or user.location %}
+    <p>
+        {% if user.name %}{{ user.name }}{% endif %}
+        {% if user.location %}
+        <a href="https://maps.google.com/?q={{ user.location }}">
+            {{ user.location }}
+        </a>
+        {% endif %}
+    </p>
+    {% endif %}
+
+    <!-- Email (if current user is administrator) -->
+    {% if current_user.is_administrator() %}
+    <p>
+        <a href="mailto:{{ user.email }}">
+            {{ user.email }}
+        </a>
+    </p>
+    {% endif %}
+
+    <!-- About me -->
+    {% if user.about_me %}
+    <p>
+        {{ user.about_me }}
+    </p>
+    {% endif %}
+
+    <!-- Registration date and Last seen -->
+    <p>
+        Registration date: {{ moment(user.member_since).format('L') }}
+        Last seen: {{ moment(user.last_seen).fromNow() }}
+    </p>
+
+    <!-- Link to Edit Profile page -->
+    {% if user == current_user %}
+    <a class="btn btn-primary" href="{{ url_for('main.edit_profile') }}">
+        Edit profile
     </a>
     {% endif %}
-</p>
-{% endif %}
 
-<!-- Email (if current user is administrator) -->
-{% if current_user.is_administrator() %}
-<p>
-    <a href="mailto:{{ user.email }}">
-        {{ user.email }}
+    <!-- Link to Edit Profile [Admin] page -->
+    {% if current_user.is_administrator() %}
+    <a class="btn btn-warning" href="{{ url_for('main.edit_profile_admin', id=user.id) }}">
+        Edit profile [Admin]
     </a>
-</p>
-{% endif %}
+    {% endif %}
+</div>
 
-<!-- About me -->
-{% if user.about_me %}
-<p>
-    {{ user.about_me }}
-</p>
-{% endif %}
+<!-- User's book list -->
+{% if books %}
+<div class="mb-3">
+    <!-- Header -->
+    <h2 class="mb-3">Books</h2>
 
-<!-- Registration date and Last seen -->
-<p>
-    Registration date: {{ moment(user.member_since).format('L') }}
-    Last seen: {{ moment(user.last_seen).fromNow() }}
-</p>
-
-<!-- Link to Edit Profile page -->
-{% if user == current_user %}
-<a class="btn btn-primary" href="{{ url_for('main.edit_profile') }}">
-    Edit profile
-</a>
-{% endif %}
-
-<!-- Link to Edit Profile [Admin] page -->
-{% if current_user.is_administrator() %}
-<a class="btn btn-warning" href="{{ url_for('main.edit_profile_admin', id=user.id) }}">
-    Edit profile [Admin]
-</a>
+    <!-- Book list -->
+    <div class="list-group">
+        {% for book in books %}
+        <a href="{{ url_for('main.book', id=book.id) }}" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+                <h3 class="mb-1">{{ book.title }}</h3>
+                <small class="text-muted">{{ moment(book.date_modified).format('LLL') }}</small>
+            </div>
+            <p><em>{{ book.author }}</em></p>
+            <p>{{ book.description }}</p>
+        </a>
+        {% endfor %}
+    </div>
+</div>
 {% endif %}
 {% endblock %}

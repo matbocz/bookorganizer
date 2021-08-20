@@ -16,9 +16,14 @@ def index():
 
 @main.route('/user/<username>')
 def user(username):
+    # Get selected user from database
     user = User.query.filter_by(username=username).first_or_404()
 
-    return render_template('user.html', user=user)
+    # Get selected user's books from database
+    books = user.books.order_by(Book.date_modified.desc()).all()
+
+    # Render selected user page
+    return render_template('user.html', user=user, books=books)
 
 
 @main.route('/book/<int:id>')
