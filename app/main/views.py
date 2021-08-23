@@ -1,3 +1,5 @@
+import base64
+
 from flask import render_template, flash, url_for
 from flask_login import login_required, current_user
 from werkzeug.utils import redirect
@@ -96,6 +98,10 @@ def edit_book(id):
             book.title = form.title.data
             book.author = form.author.data
             book.description = form.description.data
+            if form.cover.data:
+                image = base64.b64encode(form.cover.data.read())
+                image = image.decode('utf-8')
+                book.cover = image
 
             # Send selected book data to database
             db.session.add(book)
