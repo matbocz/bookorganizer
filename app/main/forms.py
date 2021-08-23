@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField, SelectField
+from wtforms import StringField, SubmitField, TextAreaField, SelectField, FileField
 from wtforms.validators import Length, DataRequired, Email, Regexp, ValidationError
 
 from app.models import Role, User
@@ -27,6 +27,7 @@ class EditBookForm(FlaskForm):
                          validators=[Length(min=0, max=64,
                                             message='Author must be between 0 and 64 characters long.')])
     description = TextAreaField('Description')
+    cover = FileField('Cover')
 
     submit = SubmitField('Save changes')
 

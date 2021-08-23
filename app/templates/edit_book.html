@@ -5,7 +5,7 @@
 {% block content %}
 <h1 class="display-1 mb-3">Edit Book</h1>
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     {{ form.csrf_token }}
 
     <!-- Title -->
@@ -36,6 +36,17 @@
 
         <ul>
             {% for error in form.description.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Cover -->
+    <div class="mb-3">
+        {{ form.cover.label(class='form-label') }} {{ form.cover(class='form-control-file') }}
+
+        <ul>
+            {% for error in form.cover.errors %}
             <li>{{ error }}</li>
             {% endfor %}
         </ul>
