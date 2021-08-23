@@ -42,6 +42,13 @@
         Last seen: {{ moment(user.last_seen).fromNow() }}
     </p>
 
+    <!-- Link to Add Book page -->
+    {% if user == current_user %}
+    <a class="btn btn-success" href="{{ url_for('main.add_book') }}">
+        Add book
+    </a>
+    {% endif %}
+
     <!-- Link to Edit Profile page -->
     {% if user == current_user %}
     <a class="btn btn-primary" href="{{ url_for('main.edit_profile') }}">
