@@ -20,6 +20,13 @@
 </p>
 {% endif %}
 
+<!-- Cover -->
+{% if book.cover %}
+<p>
+    <img src="data:image/png;base64,{{ book.cover }}">
+</p>
+{% endif %}
+
 <!-- Date added -->
 <p>
     Date added: {{ moment(book.date_added).format('LLL') }}
