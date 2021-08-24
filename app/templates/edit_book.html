@@ -12,33 +12,52 @@
     <div class="mb-3">
         {{ form.title.label(class='form-label') }} {{ form.title(class='form-control') }}
 
+        {% if form.title.errors %}
         <ul>
             {% for error in form.title.errors %}
             <li>{{ error }}</li>
             {% endfor %}
         </ul>
+        {% endif %}
     </div>
 
     <!-- Author -->
     <div class="mb-3">
         {{ form.author.label(class='form-label') }} {{ form.author(class='form-control') }}
 
+        {% if form.author.errors %}
         <ul>
             {% for error in form.author.errors %}
             <li>{{ error }}</li>
             {% endfor %}
         </ul>
+        {% endif %}
     </div>
 
     <!-- Description -->
     <div class="mb-3">
         {{ form.description.label(class='form-label') }} {{ form.description(class='form-control') }}
 
+        {% if form.description.errors %}
         <ul>
             {% for error in form.description.errors %}
             <li>{{ error }}</li>
             {% endfor %}
         </ul>
+        {% endif %}
+    </div>
+
+    <!-- Cover -->
+    <div class="mb-3">
+        {{ form.cover.label(class='form-label') }} {{ form.cover(class='form-control') }}
+
+        {% if form.cover.errors %}
+        <ul>
+            {% for error in form.cover.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
     </div>
 
     <!-- Submit button -->
