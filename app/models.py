@@ -1,9 +1,12 @@
+import os
 from datetime import datetime
 
 from flask import current_app
 from flask_login import UserMixin, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 
+from config import staticdir
 from . import db
 from . import login_manager
 
@@ -22,6 +25,20 @@ class Book(db.Model):
 
     # Relationships
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    def save_cover(self, cover):
+        """Save cover to file and cover name to database."""
+        app = current_app._get_current_object()
+        filename = secure_filename(f'{self.id}_{cover.filename}')
+
+        cover.save(os.path.join(staticdir, app.config['UPLOADS_FOLDER'], app.config['COVER_UPLOADS_FOLDER'], filename))
+        self.cover = filename
+
+    def get_cover_file_url(self):
+        """Return url to cover file."""
+        app = current_app._get_current_object()
+
+        return '/'.join([app.config['UPLOADS_FOLDER'], app.config['COVER_UPLOADS_FOLDER'], self.cover])
 
     # Refresh Book modified date
     def ping(self):
