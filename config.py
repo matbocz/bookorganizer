@@ -1,6 +1,7 @@
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+staticdir = os.path.join(basedir, 'app', 'static')
 
 
 class Config:
@@ -33,6 +34,10 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or 'sqlite:///' + os.path.join(basedir,
                                                                                                 'data-dev.sqlite')
 
+    # Upload configuration
+    UPLOADS_FOLDER = 'dev-uploads'
+    COVER_UPLOADS_FOLDER = 'covers'
+
 
 class TestingConfig(Config):
     # App configuration
@@ -44,7 +49,12 @@ class TestingConfig(Config):
 
 class ProductionConfig(Config):
     # SQLAlchemy configuration
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.join(basedir,
+                                                                                            'data.sqlite')
+
+    # Upload configuration
+    UPLOADS_FOLDER = 'uploads'
+    COVER_UPLOADS_FOLDER = 'covers'
 
 
 config = {
