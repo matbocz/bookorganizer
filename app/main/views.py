@@ -97,6 +97,11 @@ def edit_book(id):
             book.author = form.author.data
             book.description = form.description.data
 
+            # Update selected book cover
+            if form.cover.data:
+                cover = form.cover.data
+                book.save_cover(cover)
+
             # Send selected book data to database
             db.session.add(book)
             db.session.commit()
