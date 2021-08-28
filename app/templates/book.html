@@ -3,44 +3,59 @@
 {% block title %}Bookorganizer - {{ book.title }}{% endblock %}
 
 {% block content %}
-<!-- Title -->
-<h1 class="display-1 mb-3">{{ book.title }}</h1>
+<div class="mb-3">
+    <!-- Title -->
+    <h1 class="mb-1 display-1">{{ book.title }}</h1>
 
-<!-- Author -->
-{% if book.author %}
-<p>
-    {{ book.author }}
-</p>
-{% endif %}
+    <!-- Author -->
+    {% if book.author %}
+    <p><em>
+        {{ book.author }}
+    </em></p>
+    {% endif %}
+</div>
 
-<!-- Description -->
-{% if book.description %}
-<p>
-    {{ book.description }}
-</p>
-{% endif %}
+<div class="row mb-3">
+    <!-- Cover -->
+    {% if book.cover %}
+    <div class="col-sm-4 text-center">
+        <img class="mw-100 rounded" src="{{ url_for('static', filename=book.get_cover_file_url()) }}" alt="Cover">
+    </div>
+    {% endif %}
 
-<!-- Date added -->
-<p>
-    Date added: {{ moment(book.date_added).format('LLL') }}
-</p>
+    <div class="col-sm">
+        <!-- Description -->
+        {% if book.description %}
+        <p>
+            {{ book.description }}
+        </p>
+        {% endif %}
 
-<!-- Date modified -->
-<p>
-    Date modified: {{ moment(book.date_modified).format('LLL') }}
-</p>
+        <!-- Date added -->
+        <p>
+            Date added: {{ moment(book.date_added).format('LLL') }}
+        </p>
 
-<!-- Link to Edit Book page -->
-{% if current_user.is_owner(book) %}
-<a class="btn btn-primary" href="{{ url_for('main.edit_book', id=book.id) }}">
-    Edit book
-</a>
-{% endif %}
+        <!-- Date modified -->
+        <p>
+            Date modified: {{ moment(book.date_modified).format('LLL') }}
+        </p>
+    </div>
+</div>
 
-<!-- Link to delete_book function -->
-{% if current_user.is_owner(book) %}
-<a class="btn btn-danger" href="{{ url_for('main.delete_book', id=book.id) }}">
-    Delete book
-</a>
+<div class="mb-3">
+    <!-- Link to Edit Book page -->
+    {% if current_user.is_owner(book) %}
+    <a class="btn btn-primary" href="{{ url_for('main.edit_book', id=book.id) }}">
+        Edit book
+    </a>
+    {% endif %}
+
+    <!-- Link to delete_book function -->
+    {% if current_user.is_owner(book) %}
+    <a class="btn btn-danger" href="{{ url_for('main.delete_book', id=book.id) }}">
+        Delete book
+    </a>
+</div>
 {% endif %}
 {% endblock %}
