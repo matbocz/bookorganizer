@@ -48,8 +48,8 @@ class Book(db.Model):
 
         return '/'.join([app.config['UPLOADS_FOLDER'], app.config['COVER_UPLOADS_FOLDER'], self.cover])
 
-    # Refresh Book modified date
     def ping(self):
+        """Refresh book date_modified column."""
         self.date_modified = datetime.utcnow()
         db.session.add(self)
         db.session.commit()
