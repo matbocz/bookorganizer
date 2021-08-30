@@ -27,20 +27,30 @@ class Book(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     def save_cover(self, cover):
-        """Save cover to file and cover name to database."""
+        """Save cover file and save cover name to database."""
         app = current_app._get_current_object()
         filename = secure_filename(f'{self.id}_{cover.filename}')
 
-        # Remove old cover file
+        # Remove old cover file and remove old cover name from database
+        self.remove_cover()
+
+        # Save new cover file and save new cover name to database
+        cover.save(os.path.join(staticdir, app.config['UPLOADS_FOLDER'], app.config['COVER_UPLOADS_FOLDER'], filename))
+        self.cover = filename
+
+    def remove_cover(self):
+        """Remove cover file and remove cover name from database."""
+        app = current_app._get_current_object()
+
+        # Remove cover file
         try:
             os.remove(
                 os.path.join(staticdir, app.config['UPLOADS_FOLDER'], app.config['COVER_UPLOADS_FOLDER'], self.cover))
         except:
             pass
 
-        # Save new cover file and new cover name to database
-        cover.save(os.path.join(staticdir, app.config['UPLOADS_FOLDER'], app.config['COVER_UPLOADS_FOLDER'], filename))
-        self.cover = filename
+        # Remove cover name from database
+        self.cover = None
 
     def get_cover_file_url(self):
         """Return url to cover file."""
