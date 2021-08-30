@@ -66,6 +66,9 @@ def delete_book(id):
 
     # Check if current user is owner of selected book
     if current_user.is_owner(book):
+        # Delete selected book cover file
+        book.remove_cover()
+
         # Delete selected book from database
         db.session.delete(book)
         db.session.commit()
