@@ -31,6 +31,14 @@ class Book(db.Model):
         app = current_app._get_current_object()
         filename = secure_filename(f'{self.id}_{cover.filename}')
 
+        # Remove old cover file
+        try:
+            os.remove(
+                os.path.join(staticdir, app.config['UPLOADS_FOLDER'], app.config['COVER_UPLOADS_FOLDER'], self.cover))
+        except:
+            pass
+
+        # Save new cover file and new cover name to database
         cover.save(os.path.join(staticdir, app.config['UPLOADS_FOLDER'], app.config['COVER_UPLOADS_FOLDER'], filename))
         self.cover = filename
 
