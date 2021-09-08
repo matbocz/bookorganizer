@@ -3,19 +3,51 @@
 {% block title %}Bookorganizer - Home page{% endblock %}
 
 {% block content %}
-<h1 class="display-1 mb-3">
-    Hello,
-    {% if current_user.is_authenticated %}
-    {{ current_user.username }}
-    {% else %}
-    guest
-    {% endif %}
-</h1>
+<!-- Greeting current user -->
+<div class="mb-3">
+    <h1 class="display-1 mb-3">
+        Hello,
+        {% if current_user.is_authenticated %}
+        {{ current_user.username }}
+        {% else %}
+        guest
+        {% endif %}
+    </h1>
+</div>
 
-<p>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut bibendum quam, id mollis lorem. Nullam vehicula vel
-    ante eu faucibus. Quisque vitae venenatis sem. Duis non diam vitae quam pretium lacinia. In pellentesque tellus vel
-    suscipit sagittis. Vivamus sagittis quam in sollicitudin venenatis. Nullam aliquet pretium ullamcorper. Vivamus
-    consectetur, eros lacinia mattis congue, arcu lorem porttitor nunc, sed lacinia ex ipsum ut ligula.
-</p>
+<!-- List of all books -->
+{% if books %}
+<div class="mb-3">
+    <!-- Header -->
+    <h2 class="mb-3">Latest books</h2>
+
+    <!-- Book list -->
+    <div class="list-group">
+        {% for book in books %}
+        <a href="{{ url_for('main.book', id=book.id) }}" class="list-group-item list-group-item-action">
+            <div class="row">
+                <!-- Cover -->
+                {% if book.cover %}
+                <div class="col-sm-2 text-center">
+                    <img class="mw-100 rounded" src="{{ url_for('static', filename=book.get_cover_file_url()) }}"
+                         alt="Cover">
+                </div>
+                {% endif %}
+
+                <!-- Information -->
+                <div class="col-sm">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h3 class="mb-1">{{ book.title }}</h3>
+                        <small class="text-muted">{{ moment(book.date_modified).format('LLL') }}</small>
+                    </div>
+                    <p><em>{{ book.author }}</em></p>
+                    <p>{{ book.description }}</p>
+                    <p><b>Owner:</b> {{ book.owner.username }}</p>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
 {% endblock %}

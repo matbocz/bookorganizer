@@ -9,9 +9,11 @@ from ..decorators import admin_required
 from ..models import User, Role, Book
 
 
-@main.route('/', methods=['GET', 'POST'])
+@main.route('/')
 def index():
-    return render_template('index.html')
+    books = Book.query.order_by(Book.date_modified.desc()).all()
+
+    return render_template('index.html', books=books)
 
 
 @main.route('/user/<username>')
