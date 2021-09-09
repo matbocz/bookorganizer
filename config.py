@@ -21,6 +21,9 @@ class Config:
     MAIL_PORT = int(os.environ.get('MAIL_PORT', '587'))
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS', 'true').lower() in ['true', 'on', '1']
 
+    # Pagination
+    BOOKS_PER_PAGE = 10
+
     @staticmethod
     def init_app(app):
         pass
