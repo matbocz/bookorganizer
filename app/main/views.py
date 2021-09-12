@@ -1,4 +1,4 @@
-from flask import render_template, flash, url_for
+from flask import render_template, flash, url_for, request, current_app
 from flask_login import login_required, current_user
 from werkzeug.utils import redirect
 
@@ -11,9 +11,13 @@ from ..models import User, Role, Book
 
 @main.route('/')
 def index():
-    books = Book.query.order_by(Book.date_modified.desc()).all()
+    page = request.args.get(key='page', default=1, type=int)
+    pagination = Book.query.order_by(Book.date_modified.desc()).paginate(page=page,
+                                                                         per_page=current_app.config['BOOKS_PER_PAGE'],
+                                                                         error_out=False)
+    books = pagination.items
 
-    return render_template('index.html', books=books)
+    return render_template('index.html', pagination=pagination, books=books)
 
 
 @main.route('/user/<username>')
