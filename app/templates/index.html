@@ -4,7 +4,7 @@
 {% block title %}Bookorganizer - Home page{% endblock %}
 
 {% block content %}
-<!-- Greeting current user -->
+<!-- Greeting -->
 <div class="mb-3">
     <h1 class="display-1 mb-3">
         Hello,
@@ -16,42 +16,19 @@
     </h1>
 </div>
 
-<!-- List of all books -->
+<!-- Books -->
 {% if books %}
 <div class="mb-3">
     <!-- Header -->
-    <h2 class="mb-3">Latest books</h2>
+    <h2 class="mb-3">Recently added books</h2>
 
-    <!-- Book list -->
-    <div class="list-group">
-        {% for book in books %}
-        <a href="{{ url_for('main.book', id=book.id) }}" class="list-group-item list-group-item-action">
-            <div class="row">
-                <!-- Cover -->
-                {% if book.cover %}
-                <div class="col-sm-2 text-center">
-                    <img class="mw-100 rounded" src="{{ url_for('static', filename=book.get_cover_file_url()) }}"
-                         alt="Cover">
-                </div>
-                {% endif %}
-
-                <!-- Information -->
-                <div class="col-sm">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h3 class="mb-1">{{ book.title }}</h3>
-                        <small class="text-muted">{{ moment(book.date_modified).format('LLL') }}</small>
-                    </div>
-                    <p><em>{{ book.author }}</em></p>
-                    <p>{{ book.description }}</p>
-                    <p><b>Owner:</b> {{ book.owner.username }}</p>
-                </div>
-            </div>
-        </a>
-        {% endfor %}
-    </div>
+    <!-- List -->
+    {% include '_books.html' %}
 </div>
+{% endif %}
 
-<!-- Pagination widget -->
+<!-- Pagination -->
+{% if pagination %}
 <div class="mb-3">
     {{ macros.pagination_widget(pagination, 'main.index') }}
 </div>
