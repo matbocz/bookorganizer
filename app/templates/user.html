@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import "_macros.html" as macros %}
 
 {% block title %}Bookorganizer - {{ user.username }}{% endblock %}
 
@@ -64,38 +65,21 @@
     {% endif %}
 </div>
 
-<!-- User's book list -->
+<!-- User's books -->
 {% if books %}
 <div class="mb-3">
     <!-- Header -->
     <h2 class="mb-3">Books</h2>
 
-    <!-- Book list -->
-    <div class="list-group">
-        {% for book in books %}
-        <a href="{{ url_for('main.book', id=book.id) }}" class="list-group-item list-group-item-action">
-            <div class="row">
-                <!-- Cover -->
-                {% if book.cover %}
-                <div class="col-sm-2 text-center">
-                    <img class="mw-100 rounded" src="{{ url_for('static', filename=book.get_cover_file_url()) }}"
-                         alt="Cover">
-                </div>
-                {% endif %}
+    <!-- List -->
+    {% include '_books.html' %}
+</div>
+{% endif %}
 
-                <!-- Information -->
-                <div class="col-sm">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h3 class="mb-1">{{ book.title }}</h3>
-                        <small class="text-muted">{{ moment(book.date_modified).format('LLL') }}</small>
-                    </div>
-                    <p><em>{{ book.author }}</em></p>
-                    <p>{{ book.description }}</p>
-                </div>
-            </div>
-        </a>
-        {% endfor %}
-    </div>
+<!-- Pagination -->
+{% if pagination %}
+<div class="mb-3">
+    {{ macros.pagination_widget(pagination, 'main.user', username=user.username) }}
 </div>
 {% endif %}
 {% endblock %}

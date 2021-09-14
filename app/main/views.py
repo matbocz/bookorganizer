@@ -11,6 +11,7 @@ from ..models import User, Role, Book
 
 @main.route('/')
 def index():
+    # Pagination (All books)
     page = request.args.get(key='page', default=1, type=int)
     pagination = Book.query.order_by(Book.date_modified.desc()).paginate(page=page,
                                                                          per_page=current_app.config['BOOKS_PER_PAGE'],
@@ -25,11 +26,15 @@ def user(username):
     # Get selected user from database
     user = User.query.filter_by(username=username).first_or_404()
 
-    # Get selected user's books from database
-    books = user.books.order_by(Book.date_modified.desc()).all()
+    # Pagination (Selected user's books)
+    page = request.args.get(key='page', default=1, type=int)
+    pagination = user.books.order_by(Book.date_modified.desc()).paginate(page=page,
+                                                                         per_page=current_app.config['BOOKS_PER_PAGE'],
+                                                                         error_out=False)
+    books = pagination.items
 
     # Render selected user page
-    return render_template('user.html', user=user, books=books)
+    return render_template('user.html', user=user, pagination=pagination, books=books)
 
 
 @main.route('/book/<int:id>')
