@@ -24,6 +24,9 @@ class Config:
     # Pagination
     BOOKS_PER_PAGE = 10
 
+    # Upload configuration
+    MAX_CONTENT_LENGTH = 16 * 1024 * 1024
+
     @staticmethod
     def init_app(app):
         pass
