@@ -20,6 +20,7 @@ class Book(db.Model):
     author = db.Column(db.String(64))
     description = db.Column(db.Text())
     cover = db.Column(db.Text())
+    file = db.Column(db.Text())
     date_added = db.Column(db.DateTime(), default=datetime.utcnow)
     date_modified = db.Column(db.DateTime(), default=datetime.utcnow)
 
