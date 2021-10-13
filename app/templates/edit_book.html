@@ -60,6 +60,20 @@
         {% endif %}
     </div>
 
+    <!-- File -->
+    <div class="mb-3">
+        {{ form.file.label(class='form-label') }} ({{ ", ".join(form.allowedFiles) }})
+        {{ form.file(class='form-control') }}
+
+        {% if form.file.errors %}
+        <ul>
+            {% for error in form.file.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+
     <!-- Submit button -->
     {{ form.submit(class='btn btn-primary') }}
 </form>

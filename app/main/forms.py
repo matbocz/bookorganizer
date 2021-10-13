@@ -20,6 +20,8 @@ class AddBookForm(FlaskForm):
 
 
 class EditBookForm(FlaskForm):
+    allowedFiles = ['epub', 'mobi', 'pdf', 'txt']
+
     title = StringField('Title',
                         validators=[DataRequired(message='Title is required.'),
                                     Length(min=1, max=64,
@@ -30,6 +32,8 @@ class EditBookForm(FlaskForm):
     description = TextAreaField('Description')
     cover = FileField('Cover',
                       validators=[FileAllowed(['jpg', 'png'], 'File must have .jpg or .png extension.')])
+    file = FileField('File',
+                     validators=[FileAllowed(allowedFiles, f'File must have {", ".join(allowedFiles)} extension.')])
 
     submit = SubmitField('Save changes')
 
