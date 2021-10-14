@@ -43,6 +43,7 @@ class DevelopmentConfig(Config):
     # Upload configuration
     UPLOADS_FOLDER = 'dev-uploads'
     COVER_UPLOADS_FOLDER = 'covers'
+    BOOK_UPLOADS_FOLDER = 'books'
 
 
 class TestingConfig(Config):
@@ -61,6 +62,7 @@ class ProductionConfig(Config):
     # Upload configuration
     UPLOADS_FOLDER = 'uploads'
     COVER_UPLOADS_FOLDER = 'covers'
+    BOOK_UPLOADS_FOLDER = 'books'
 
 
 config = {
