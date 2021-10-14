@@ -27,31 +27,68 @@ class Book(db.Model):
     # Relationships
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    def save_cover(self, cover):
-        """Save cover file and save cover name to database."""
+    def save_file(self, file, type):
+        """
+        Save file to disk and save filename to database.
+
+        :param file: This should be FileStorage
+        :param type: This should be book or cover
+        """
+        file_types = ['book', 'cover']
+        if type not in file_types:
+            raise ValueError(f'Invalid file type. Expected one of: {file_types}')
+
+        # Get current app and create secure filename
         app = current_app._get_current_object()
-        filename = secure_filename(f'{self.id}_{cover.filename}')
+        filename = secure_filename(f'{self.id}_{type}_{file.filename}')
 
-        # Remove old cover file and remove old cover name from database
-        self.remove_cover()
+        # Check file type
+        if type == 'book':
+            # Remove old file from disk
+            self.remove_file(type='book')
 
-        # Save new cover file and save new cover name to database
-        cover.save(os.path.join(staticdir, app.config['UPLOADS_FOLDER'], app.config['COVER_UPLOADS_FOLDER'], filename))
-        self.cover = filename
+            # Save file to disk and save filename to database
+            file.save(os.path.join(staticdir, app.config['UPLOADS_FOLDER'],
+                                   app.config['BOOK_UPLOADS_FOLDER'], filename))
+            self.file = filename
+        if type == 'cover':
+            # Remove old file from disk
+            self.remove_file(type='cover')
 
-    def remove_cover(self):
-        """Remove cover file and remove cover name from database."""
+            # Save file to disk and save filename to database
+            file.save(os.path.join(staticdir, app.config['UPLOADS_FOLDER'],
+                                   app.config['COVER_UPLOADS_FOLDER'], filename))
+            self.cover = filename
+
+    def remove_file(self, type):
+        """
+        Remove file from disk and remove filename from database.
+
+        :param type: This should be book or cover
+        """
+        file_types = ['book', 'cover']
+        if type not in file_types:
+            raise ValueError(f'Invalid file type. Expected one of: {file_types}')
+
+        # Get current app
         app = current_app._get_current_object()
 
-        # Remove cover file
         try:
-            os.remove(
-                os.path.join(staticdir, app.config['UPLOADS_FOLDER'], app.config['COVER_UPLOADS_FOLDER'], self.cover))
+            # Check file type
+            if type == 'book':
+                # Remove file from disk and remove filename from database
+                os.remove(
+                    os.path.join(staticdir, app.config['UPLOADS_FOLDER'],
+                                 app.config['BOOK_UPLOADS_FOLDER'], self.file))
+                self.file = None
+            if type == 'cover':
+                # Remove file from disk and remove filename from database
+                os.remove(
+                    os.path.join(staticdir, app.config['UPLOADS_FOLDER'],
+                                 app.config['COVER_UPLOADS_FOLDER'], self.cover))
+                self.cover = None
         except:
             pass
-
-        # Remove cover name from database
-        self.cover = None
 
     def get_cover_file_url(self):
         """Return url to cover file."""

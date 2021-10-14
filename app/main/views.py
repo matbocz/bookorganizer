@@ -114,7 +114,12 @@ def edit_book(id):
             # Update selected book cover
             if form.cover.data:
                 cover = form.cover.data
-                book.save_cover(cover)
+                book.save_file(cover, type='cover')
+
+            # Update selected book file
+            if form.file.data:
+                file = form.file.data
+                book.save_file(file, type='book')
 
             # Send selected book data to database
             db.session.add(book)
