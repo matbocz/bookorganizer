@@ -96,6 +96,17 @@ class Book(db.Model):
 
         return '/'.join([app.config['UPLOADS_FOLDER'], app.config['COVER_UPLOADS_FOLDER'], self.cover])
 
+    def get_book_file_info(self):
+        """Return book file info."""
+        app = current_app._get_current_object()
+
+        filename = os.path.splitext(self.file.split('_', 2)[2])[0]
+        file_ext = os.path.splitext(self.file)[1]
+        file_path = '/'.join([staticdir, app.config['UPLOADS_FOLDER'], app.config['BOOK_UPLOADS_FOLDER'], self.file])
+        file_size_mb = os.stat(file_path).st_size / 1048576
+
+        return {'name': filename, 'ext': file_ext, 'size': round(file_size_mb, 2)}
+
     def ping(self):
         """Refresh book date_modified column."""
         self.date_modified = datetime.utcnow()

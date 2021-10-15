@@ -31,6 +31,15 @@
         </p>
         {% endif %}
 
+        <!-- File -->
+        {% if book.file %}
+        <p>
+            {{ book.get_book_file_info().get('name') }} |
+            {{ book.get_book_file_info().get('ext') }} |
+            {{ book.get_book_file_info().get('size') }} MB
+        </p>
+        {% endif %}
+
         <!-- Date added -->
         <p>
             Date added: {{ moment(book.date_added).format('LLL') }}
