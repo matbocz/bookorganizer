@@ -63,7 +63,7 @@ def add_book():
         db.session.commit()
 
         # Show message on page
-        flash('Book has been added.')
+        flash(f'Book {book.title} has been added.')
 
         # Redirect to current user page
         return redirect(url_for('.user', username=current_user.username))
@@ -129,7 +129,7 @@ def edit_book(id):
             db.session.commit()
 
             # Show message on page
-            flash('Book has been updated.')
+            flash('This book has been updated.')
 
             # Refresh selected book modified date
             book.ping()
@@ -146,7 +146,7 @@ def edit_book(id):
         return render_template('edit_book.html', form=form)
 
     # Show message on page
-    flash('Book cannot be updated by you.')
+    flash('This book cannot be updated by you.')
 
     # Redirect to selected book page
     return redirect(url_for('.book', id=id))
@@ -173,7 +173,7 @@ def download(filename):
         return send_file(path, as_attachment=True, download_name=download_name)
 
     # Show message on page
-    flash('Book cannot be downloaded by you.')
+    flash('This book cannot be downloaded by you.')
 
     # Redirect to selected book page
     return redirect(url_for('.book', id=book.id))
