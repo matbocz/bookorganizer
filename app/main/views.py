@@ -80,8 +80,9 @@ def delete_book(id):
 
     # Check if current user is owner of selected book
     if current_user.is_owner(book):
-        # Delete selected book cover file
-        book.remove_cover()
+        # Delete selected book file and cover
+        book.remove_file(type='book')
+        book.remove_file(type='cover')
 
         # Delete selected book from database
         db.session.delete(book)
