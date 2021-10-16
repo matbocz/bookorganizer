@@ -36,7 +36,8 @@
         <p>
             {{ book.get_book_file_info().get('name') }} |
             {{ book.get_book_file_info().get('ext') }} |
-            {{ book.get_book_file_info().get('size') }} MB
+            {{ book.get_book_file_info().get('size') }} MB |
+            <a href="{{ url_for('.download', filename=book.file) }}">Download</a>
         </p>
         {% endif %}
 
