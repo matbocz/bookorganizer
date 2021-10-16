@@ -1,7 +1,10 @@
-from flask import render_template, flash, url_for, request, current_app
+import os.path
+
+from flask import render_template, flash, url_for, request, current_app, send_file
 from flask_login import login_required, current_user
 from werkzeug.utils import redirect
 
+from config import staticdir
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, AddBookForm, EditBookForm
 from .. import db
@@ -147,6 +150,33 @@ def edit_book(id):
 
     # Redirect to selected book page
     return redirect(url_for('.book', id=id))
+
+
+@main.route('/download/<filename>', methods=['GET', 'POST'])
+@login_required
+def download(filename):
+    """Download book file from server."""
+    app = current_app._get_current_object()
+
+    # Get selected book from database
+    book = Book.query.filter_by(file=filename).first_or_404()
+
+    # Check if current user is owner of selected book
+    if current_user.is_owner(book):
+        # Create path to selected book file
+        path = os.path.join(staticdir, app.config['UPLOADS_FOLDER'], app.config['BOOK_UPLOADS_FOLDER'], filename)
+
+        # Create download name for book file
+        download_name = filename.split('_', 2)[2]
+
+        # Send file to client
+        return send_file(path, as_attachment=True, download_name=download_name)
+
+    # Show message on page
+    flash('Book cannot be downloaded by you.')
+
+    # Redirect to selected book page
+    return redirect(url_for('.book', id=book.id))
 
 
 @main.route('/edit-profile', methods=['GET', 'POST'])
