@@ -115,3 +115,10 @@ dmypy.json
 
 # PyCharm project settings
 .idea
+
+# Static folder
+app/static
+
+# Databases
+/data.sqlite
+/data-dev.sqlite
