@@ -1,9 +1,10 @@
-from flask import render_template, request, url_for, redirect, flash
+from flask import render_template, request, url_for, redirect, flash, current_app
 from flask_login import login_user, login_required, logout_user, current_user
 
 from . import auth
 from .forms import LoginForm, RegistrationForm
 from .. import db
+from ..email import send_email
 from ..models import User
 
 
@@ -51,6 +52,10 @@ def register():
                     password=form.password.data)
         db.session.add(user)
         db.session.commit()
+
+        app = current_app._get_current_object()
+        if app.config['BOOKORGANIZER_ADMIN']:
+            send_email(to=app.config['BOOKORGANIZER_ADMIN'], subject='New user', template='mail/new_user', user=user)
 
         flash('You can log in now.')
 
