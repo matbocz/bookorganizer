@@ -1,3 +1,4 @@
+import time
 import unittest
 
 from app import create_app, db
@@ -35,6 +36,30 @@ class UserModelTestCase(unittest.TestCase):
         u = User(password='book')
         u2 = User(password='book')
         self.assertTrue(u.password_hash != u2.password_hash)
+
+    def test_valid_user_confirm_token(self):
+        u = User(password='book')
+        db.session.add(u)
+        db.session.commit()
+        token = u.generate_user_confirm_token()
+        self.assertTrue(u.confirm_user(token))
+
+    def test_invalid_user_confirm_token(self):
+        u1 = User(password='book')
+        u2 = User(password='movie')
+        db.session.add(u1)
+        db.session.add(u2)
+        db.session.commit()
+        token = u1.generate_user_confirm_token()
+        self.assertFalse(u2.confirm_user(token))
+
+    def test_expired_user_confirm_token(self):
+        u = User(password='book')
+        db.session.add(u)
+        db.session.commit()
+        token = u.generate_user_confirm_token(expiration=1)
+        time.sleep(2)
+        self.assertFalse(u.confirm_user(token))
 
     def test_user_role(self):
         u = User(email='user@email.com', password='book')
