@@ -3,6 +3,7 @@ from datetime import datetime
 
 from flask import current_app
 from flask_login import UserMixin, AnonymousUserMixin
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 
@@ -223,6 +224,29 @@ class User(UserMixin, db.Model):
     # Password verification
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    # Generate token (Confirm User)
+    def generate_user_confirm_token(self, expiration=3600):
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+
+        return s.dumps({'confirm': self.id}).decode('utf-8')
+
+    # Confirm User (token)
+    def confirm_user(self, token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+
+        try:
+            data = s.loads(token.encode('utf-8'))
+        except:
+            return False
+
+        if data.get('confirm') != self.id:
+            return False
+
+        self.confirmed = True
+        db.session.add(self)
+
+        return True
 
     # Check User permission
     def can(self, perm):
