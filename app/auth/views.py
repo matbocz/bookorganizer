@@ -70,3 +70,17 @@ def register():
         return redirect(url_for('main.index'))
 
     return render_template('auth/register.html', form=form)
+
+
+@auth.route('/confirm_user/<token>')
+@login_required
+def confirm_user(token):
+    if current_user.confirmed:
+        return redirect(url_for('main.index'))
+    if current_user.confirm_user(token):
+        db.session.commit()
+        flash('You have confirmed your account.')
+    else:
+        flash('Link is invalid or has expired.')
+
+    return redirect(url_for('main.index'))
