@@ -1,0 +1,10 @@
+<p>Hello <b>{{ user.username }}</b>,</p>
+<p>Your email address was used to create an account on Bookorganizer.</p>
+<p>
+    To confirm your account please
+    <a href="{{ url_for('auth.confirm_user', token=token, _external=True) }}">CLICK HERE</a>.
+</p>
+<p>Alternatively, click on the following link:</p>
+<p>{{ url_for('auth.confirm_user', token=token, _external=True) }}</p>
+<hr>
+<p>Please do not reply to this email.</p>

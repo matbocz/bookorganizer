@@ -1,0 +1,9 @@
+Hello {{ user.username }},
+
+Your email address was used to create an account on Bookorganizer.
+
+To confirm your account please click on the following link:
+
+{{ url_for('auth.confirm_user', token=token, _external=True) }}
+
+Please do not reply to this email.
