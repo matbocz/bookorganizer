@@ -47,18 +47,26 @@ def logout():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
+        # Add new user to database
         user = User(email=form.email.data.lower(),
                     username=form.username.data,
                     password=form.password.data)
         db.session.add(user)
         db.session.commit()
 
+        # Send confirmation email to new user
+        token = user.generate_user_confirm_token()
+        send_email(to=user.email, subject="Confirm account", template='auth/mail/confirm_user', user=user, token=token)
+
+        # Send email informing about new user to administrator
         app = current_app._get_current_object()
         if app.config['BOOKORGANIZER_ADMIN']:
             send_email(to=app.config['BOOKORGANIZER_ADMIN'], subject='New user', template='mail/new_user', user=user)
 
+        # Show message on page
         flash('You can log in now.')
 
-        return redirect(url_for('auth.login'))
+        # Redirect to main page
+        return redirect(url_for('main.index'))
 
     return render_template('auth/register.html', form=form)
