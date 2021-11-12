@@ -14,6 +14,15 @@ def before_request():
         current_user.ping()
 
 
+@auth.route('/unconfirmed_user')
+def unconfirmed_user():
+    # Redirect anonymous and confirmed users to main page
+    if current_user.is_anonymous or current_user.confirmed:
+        return redirect(url_for('main.index'))
+
+    return render_template('auth/unconfirmed_user.html')
+
+
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()

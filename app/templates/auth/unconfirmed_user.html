@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Bookorganizer - Unconfirmed user{% endblock %}
+
+{% block content %}
+<div class="mb-3">
+    <h1 class="display-1 mb-3">Hello, {{ current_user.username }},</h1>
+
+    <p>You have not confirmed your account.</p>
+    <p>An account confirmation link has been sent to the e-mail address: {{ current_user.email }}.</p>
+    <p>Please check your inbox and confirm your e-mail address.</p>
+</div>
+{% endblock %}
