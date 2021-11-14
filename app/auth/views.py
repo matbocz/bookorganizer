@@ -82,8 +82,8 @@ def register():
         # Show message on page
         flash('You can log in now.')
 
-        # Redirect to main page
-        return redirect(url_for('main.index'))
+        # Redirect to login page
+        return redirect(url_for('auth.login'))
 
     return render_template('auth/register.html', form=form)
 
