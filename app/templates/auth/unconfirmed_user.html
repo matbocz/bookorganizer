@@ -9,5 +9,9 @@
     <p>You have not confirmed your account.</p>
     <p>An account confirmation link has been sent to the e-mail address: {{ current_user.email }}.</p>
     <p>Please check your inbox and confirm your e-mail address.</p>
+    <p>
+        Resend confirmation e-mail?
+        <a href="{{ url_for('auth.resend_confirmation') }}">CLICK HERE</a>
+    </p>
 </div>
 {% endblock %}
