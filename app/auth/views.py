@@ -100,3 +100,22 @@ def confirm_user(token):
         flash('Link is invalid or has expired.')
 
     return redirect(url_for('main.index'))
+
+
+@auth.route('/resend_confirmation')
+@login_required
+def resend_confirmation():
+    # Redirect anonymous and confirmed users to main page
+    if current_user.is_anonymous or current_user.confirmed:
+        return redirect(url_for('main.index'))
+
+    # Resend confirmation email to new user
+    token = current_user.generate_user_confirm_token()
+    send_email(to=current_user.email, subject="Confirm account", template='auth/mail/confirm_user', user=current_user,
+               token=token)
+
+    # Show message on page
+    flash(f'A new account confirmation link has been sent to the e-mail address: {current_user.email}.')
+
+    # Redirect to unconfirmed page
+    return redirect(url_for('auth.unconfirmed_user'))
