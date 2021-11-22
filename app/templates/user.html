@@ -21,6 +21,15 @@
     </p>
     {% endif %}
 
+    <!-- Confirmed (if current user is administrator) -->
+    {% if current_user.is_administrator() %}
+    {% if user.confirmed == 1 %}
+    <p class="text-success">Confirmed user</p>
+    {% else %}
+    <p class="text-danger">Unconfirmed user</p>
+    {% endif %}
+    {% endif %}
+
     <!-- Email (if current user is administrator) -->
     {% if current_user.is_administrator() %}
     <p>
