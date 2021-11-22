@@ -18,7 +18,8 @@ def users(count=10):
                  name=fake.name(),
                  location=fake.city(),
                  about_me=fake.text(),
-                 member_since=fake.past_date())
+                 member_since=fake.past_date(),
+                 confirmed=True)
         db.session.add(u)
 
         try:
