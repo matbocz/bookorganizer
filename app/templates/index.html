@@ -16,8 +16,9 @@
     </h1>
 </div>
 
-<!-- Books -->
+<!-- All books -->
 {% if books %}
+<!-- Books list -->
 <div class="mb-3">
     <!-- Header -->
     <h2 class="mb-3">Recently added books</h2>
@@ -25,10 +26,8 @@
     <!-- List -->
     {% include '_books.html' %}
 </div>
-{% endif %}
 
 <!-- Pagination -->
-{% if pagination %}
 <div class="mb-3">
     {{ macros.pagination_widget(pagination, 'main.index') }}
 </div>
