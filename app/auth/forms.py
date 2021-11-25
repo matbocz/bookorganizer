@@ -68,4 +68,4 @@ class ChangePasswordForm(FlaskForm):
                                               EqualTo(fieldname='new_password',
                                                       message='New passwords must be identical.')])
 
-    submit = SubmitField('Update Password')
+    submit = SubmitField('Change password')
