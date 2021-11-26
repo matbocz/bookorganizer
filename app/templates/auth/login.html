@@ -45,9 +45,17 @@
     {{ form.submit(class='btn btn-primary') }}
 </form>
 
+<!-- Link to Register page -->
 <p>
     <a href="{{ url_for('auth.register') }}">
         Click here to register
+    </a>
+</p>
+
+<!-- Link to Reset password request page -->
+<p>
+    <a href="{{ url_for('auth.reset_password_request') }}">
+        Click here to reset password
     </a>
 </p>
 {% endblock %}
