@@ -248,6 +248,34 @@ class User(UserMixin, db.Model):
 
         return True
 
+    # Generate token (Reset Password)
+    def generate_password_reset_token(self, expiration=3600):
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+
+        return s.dumps({'reset': self.id}).decode('utf-8')
+
+    # Reset Password (token)
+    @staticmethod
+    def reset_password(token, new_password):
+        s = Serializer(current_app.config['SECRET_KEY'])
+
+        # Try to load token
+        try:
+            data = s.loads(token.encode('utf-8'))
+        except:
+            return False
+
+        # Get user from database and check if user exists
+        user = User.query.get(data.get('reset'))
+        if user is None:
+            return False
+
+        # Change user password
+        user.password = new_password
+        db.session.add(user)
+
+        return True
+
     # Check User permission
     def can(self, perm):
         return self.role is not None and self.role.has_permission(perm)
