@@ -92,3 +92,21 @@ class ResetPasswordForm(FlaskForm):
                                                       message='New passwords must be identical.')])
 
     submit = SubmitField('Reset password')
+
+
+class ChangeEmailForm(FlaskForm):
+    new_email = StringField('New e-mail',
+                            validators=[DataRequired(message='New e-mail is required.'),
+                                        Length(min=3, max=64,
+                                               message='New e-mail must be between 3 and 64 characters long.'),
+                                        Email(message='New e-mail must be valid.')])
+    password = PasswordField('Password',
+                             validators=[DataRequired(message='Password is required.'),
+                                         Length(min=10, max=64,
+                                                message='Password must be between 10 and 64 characters long.')])
+
+    submit = SubmitField('Change e-mail')
+
+    def validate_email(self, field):
+        if User.query.filter_by(email=field.data).first():
+            raise ValidationError('This e-mail is already in use.')

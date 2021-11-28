@@ -276,6 +276,41 @@ class User(UserMixin, db.Model):
 
         return True
 
+    # Generate token (Change E-mail)
+    def generate_email_change_token(self, new_email, expiration=3600):
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+
+        return s.dumps({'change_email': self.id, 'new_email': new_email}).decode('utf-8')
+
+    # Change E-mail (token)
+    def change_email(self, token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+
+        # Try to load token
+        try:
+            data = s.loads(token.encode('utf-8'))
+        except:
+            return False
+
+        # Check if user ID in token is correct
+        if data.get('change_email') != self.id:
+            return False
+
+        # Get new_email from token
+        new_email = data.get('new_email')
+        # Check if new_email is not None
+        if new_email is None:
+            return False
+        # Check if new_email exists in database
+        if self.query.filter_by(email=new_email).first() is not None:
+            return False
+
+        # Change user e-mail
+        self.email = new_email
+        db.session.add(self)
+
+        return True
+
     # Check User permission
     def can(self, perm):
         return self.role is not None and self.role.has_permission(perm)

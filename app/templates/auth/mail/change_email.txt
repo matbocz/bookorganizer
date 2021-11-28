@@ -1,0 +1,7 @@
+Hello {{ user.username }},
+
+To change your e-mail please click on the following link:
+
+{{ url_for('auth.change_email', token=token, _external=True) }}
+
+Please do not reply to this email.

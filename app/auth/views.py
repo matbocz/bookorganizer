@@ -2,7 +2,8 @@ from flask import render_template, request, url_for, redirect, flash, current_ap
 from flask_login import login_user, login_required, logout_user, current_user
 
 from . import auth
-from .forms import LoginForm, RegistrationForm, ChangePasswordForm, ResetPasswordRequestForm, ResetPasswordForm
+from .forms import LoginForm, RegistrationForm, ChangePasswordForm, ResetPasswordRequestForm, ResetPasswordForm, \
+    ChangeEmailForm
 from .. import db
 from ..email import send_email
 from ..models import User
@@ -199,3 +200,48 @@ def reset_password(token):
 
     # Render reset_password template
     return render_template('auth/reset_password.html', form=form)
+
+
+@auth.route('/change_email', methods=['GET', 'POST'])
+@login_required
+def change_email_request():
+    # Check if form has been submitted
+    form = ChangeEmailForm()
+    if form.validate_on_submit():
+        # Check if user password is correct
+        if current_user.verify_password(form.password.data):
+            # Get new e-mail from form, create token and send e-mail with this token
+            new_email = form.new_email.data.lower()
+            token = current_user.generate_email_change_token(new_email)
+            send_email(to=new_email, subject="Confirm e-mail address", template='auth/mail/change_email',
+                       user=current_user, token=token)
+
+            # Show message on page
+            flash(f'A change e-mail link has been sent to the e-mail address: {new_email}.')
+
+            # Redirect to main page
+            return redirect(url_for('main.index'))
+        else:
+            # Show message on page
+            flash('Invalid e-mail or password.')
+
+    # Render change_email template
+    return render_template("auth/change_email.html", form=form)
+
+
+@auth.route('/change_email/<token>')
+@login_required
+def change_email(token):
+    # Check if e-mail has been changed correctly
+    if current_user.change_email(token):
+        # Commit database changes
+        db.session.commit()
+
+        # Show message on page
+        flash("You have changed your e-mail.")
+    else:
+        # Show message on page
+        flash('Invalid request.')
+
+    # Redirect to main page
+    return redirect(url_for('main.index'))
