@@ -125,8 +125,14 @@ def resend_confirmation():
 @auth.route('/change_password', methods=['GET', 'POST'])
 @login_required
 def change_password():
+    # Redirect unconfirmed users to unconfirmed user page
+    if not current_user.confirmed:
+        return redirect(url_for('auth.unconfirmed_user'))
+
+    # Check if form has been submitted
     form = ChangePasswordForm()
     if form.validate_on_submit():
+        # Check if old password has been verified correctly
         if current_user.verify_password(form.old_password.data):
             # Change user password
             current_user.password = form.new_password.data
@@ -205,6 +211,10 @@ def reset_password(token):
 @auth.route('/change_email', methods=['GET', 'POST'])
 @login_required
 def change_email_request():
+    # Redirect unconfirmed users to unconfirmed user page
+    if not current_user.confirmed:
+        return redirect(url_for('auth.unconfirmed_user'))
+
     # Check if form has been submitted
     form = ChangeEmailForm()
     if form.validate_on_submit():
@@ -232,6 +242,10 @@ def change_email_request():
 @auth.route('/change_email/<token>')
 @login_required
 def change_email(token):
+    # Redirect unconfirmed users to unconfirmed user page
+    if not current_user.confirmed:
+        return redirect(url_for('auth.unconfirmed_user'))
+
     # Check if e-mail has been changed correctly
     if current_user.change_email(token):
         # Commit database changes
