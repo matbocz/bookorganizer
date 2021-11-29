@@ -116,8 +116,9 @@ dmypy.json
 # PyCharm project settings
 .idea
 
-# Static folder
-app/static
+# Uploads folders
+app/static/uploads
+app/static/dev-uploads
 
 # Databases
 /data.sqlite
