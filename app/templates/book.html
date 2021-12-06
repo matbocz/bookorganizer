@@ -57,14 +57,14 @@
     <!-- Link to Edit Book page -->
     {% if current_user.is_owner(book) %}
     <a class="btn btn-primary" href="{{ url_for('main.edit_book', id=book.id) }}">
-        Edit book
+        <i class="bi bi-pencil"></i> Edit book
     </a>
     {% endif %}
 
     <!-- Link to delete_book function -->
     {% if current_user.is_owner(book) %}
     <a class="btn btn-danger" href="{{ url_for('main.delete_book', id=book.id) }}">
-        Delete book
+        <i class="bi bi-x"></i> Delete book
     </a>
 </div>
 {% endif %}

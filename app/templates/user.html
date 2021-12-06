@@ -55,21 +55,21 @@
     <!-- Link to Add Book page -->
     {% if user == current_user %}
     <a class="btn btn-success" href="{{ url_for('main.add_book') }}">
-        Add book
+        <i class="bi bi-plus"></i> Add book
     </a>
     {% endif %}
 
     <!-- Link to Edit Profile page -->
     {% if user == current_user %}
     <a class="btn btn-primary" href="{{ url_for('main.edit_profile') }}">
-        Edit profile
+        <i class="bi bi-pencil"></i> Edit profile
     </a>
     {% endif %}
 
     <!-- Link to Edit Profile [Admin] page -->
     {% if current_user.is_administrator() %}
     <a class="btn btn-warning" href="{{ url_for('main.edit_profile_admin', id=user.id) }}">
-        Edit profile [Admin]
+        <i class="bi bi-pencil"></i> Edit profile [Admin]
     </a>
     {% endif %}
 </div>

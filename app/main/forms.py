@@ -16,8 +16,6 @@ class AddBookForm(FlaskForm):
                                             message='Author must be between 0 and 64 characters long.')])
     description = TextAreaField('Description')
 
-    submit = SubmitField('Add book')
-
 
 class EditBookForm(FlaskForm):
     allowedCovers = ['jpg', 'png']
@@ -36,8 +34,6 @@ class EditBookForm(FlaskForm):
     file = FileField('File',
                      validators=[FileAllowed(allowedFiles, f'File must have {", ".join(allowedFiles)} extension.')])
 
-    submit = SubmitField('Save changes')
-
 
 class EditProfileForm(FlaskForm):
     name = StringField('Name',
@@ -47,8 +43,6 @@ class EditProfileForm(FlaskForm):
                            validators=[Length(min=0, max=64,
                                               message='Location must be between 0 and 64 characters long.')])
     about_me = TextAreaField('About me')
-
-    submit = SubmitField('Save changes')
 
 
 class EditProfileAdminForm(FlaskForm):
@@ -74,8 +68,6 @@ class EditProfileAdminForm(FlaskForm):
                            validators=[Length(min=0, max=64,
                                               message='Location must be between 0 and 64 characters long.')])
     about_me = TextAreaField('About me')
-
-    submit = SubmitField('Save changes')
 
     def __init__(self, user, *args, **kwargs):
         super(EditProfileAdminForm, self).__init__(*args, **kwargs)
