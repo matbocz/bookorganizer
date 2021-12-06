@@ -17,8 +17,6 @@ class LoginForm(FlaskForm):
                                                 message='Password must be between 10 and 64 characters long.')])
     remember_me = BooleanField('Remember me')
 
-    submit = SubmitField('Log in')
-
 
 class RegistrationForm(FlaskForm):
     email = StringField('E-mail',
@@ -44,8 +42,6 @@ class RegistrationForm(FlaskForm):
                                           EqualTo(fieldname='password',
                                                   message='Passwords must be identical.')])
 
-    submit = SubmitField('Register')
-
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
             raise ValidationError('This e-mail is already in use.')
@@ -68,8 +64,6 @@ class ChangePasswordForm(FlaskForm):
                                               EqualTo(fieldname='new_password',
                                                       message='New passwords must be identical.')])
 
-    submit = SubmitField('Change password')
-
 
 class ResetPasswordRequestForm(FlaskForm):
     email = StringField('E-mail',
@@ -77,8 +71,6 @@ class ResetPasswordRequestForm(FlaskForm):
                                     Length(min=3, max=64,
                                            message='Email must be between 3 and 64 characters long.'),
                                     Email(message='Email must be valid.')])
-
-    submit = SubmitField('Reset password')
 
 
 class ResetPasswordForm(FlaskForm):
@@ -91,8 +83,6 @@ class ResetPasswordForm(FlaskForm):
                                               EqualTo(fieldname='new_password',
                                                       message='New passwords must be identical.')])
 
-    submit = SubmitField('Reset password')
-
 
 class ChangeEmailForm(FlaskForm):
     new_email = StringField('New e-mail',
@@ -104,8 +94,6 @@ class ChangeEmailForm(FlaskForm):
                              validators=[DataRequired(message='Password is required.'),
                                          Length(min=10, max=64,
                                                 message='Password must be between 10 and 64 characters long.')])
-
-    submit = SubmitField('Change e-mail')
 
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
