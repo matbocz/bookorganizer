@@ -10,8 +10,8 @@ const THEME_LOCAL_STORAGE_VALUE = JSON.parse(localStorage.getItem(THEME_LOCAL_ST
 const LIGHT_THEME_STYLE_LINK = document.getElementById("light-theme-style-link");
 const DARK_THEME_STYLE_LINK = document.getElementById("dark-theme-style-link");
 
-// Get theme switcher button
-const THEME_SWITCHER_BUTTON = document.getElementById("theme-switcher")
+// Get theme switch button
+const THEME_SWITCH_BUTTON = document.getElementById("theme-switch-button");
 
 // Set theme
 let isDark = THEME_LOCAL_STORAGE_VALUE;
@@ -37,11 +37,11 @@ function switchTheme() {
 function enableDarkTheme() {
     LIGHT_THEME_STYLE_LINK.setAttribute("rel", "stylesheet alternate");
     DARK_THEME_STYLE_LINK.setAttribute("rel", "stylesheet");
-    THEME_SWITCHER_BUTTON.innerHTML = "<i class='bi bi-moon'></i> Dark";
+    THEME_SWITCH_BUTTON.innerHTML = "<i class='bi bi-moon'></i> Dark";
 }
 
 function enableLightTheme() {
     DARK_THEME_STYLE_LINK.setAttribute("rel", "stylesheet alternate");
     LIGHT_THEME_STYLE_LINK.setAttribute("rel", "stylesheet");
-    THEME_SWITCHER_BUTTON.innerHTML = "<i class='bi bi-sun'></i> Light";
+    THEME_SWITCH_BUTTON.innerHTML = "<i class='bi bi-sun'></i> Light";
 }
