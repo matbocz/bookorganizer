@@ -1,19 +1,20 @@
 // Theme Switcher script
 
-// Set themes paths
-DARK_THEME_PATH = "/static/css/bootstrap-darkly.min.css"
-LIGHT_THEME_PATH = "/static/css/bootstrap-flatly.min.css"
+// Set localStorage key
+const THEME_LOCAL_STORAGE_KEY = "dark-mode";
 
 // Get localStorage value
-const LOCAL_STORAGE_KEY = "dark-mode";
-const LOCAL_STORAGE_VALUE = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+const THEME_LOCAL_STORAGE_VALUE = JSON.parse(localStorage.getItem(THEME_LOCAL_STORAGE_KEY));
 
-// Get theme style link and theme switcher
-const THEME_STYLE_LINK = document.getElementById("theme-style-link");
-const THEME_SWITCHER = document.getElementById("theme-switcher")
+// Get theme style links
+const LIGHT_THEME_STYLE_LINK = document.getElementById("light-theme-style-link");
+const DARK_THEME_STYLE_LINK = document.getElementById("dark-theme-style-link");
+
+// Get theme switcher button
+const THEME_SWITCHER_BUTTON = document.getElementById("theme-switcher")
 
 // Set theme
-let isDark = LOCAL_STORAGE_VALUE;
+let isDark = THEME_LOCAL_STORAGE_VALUE;
 if (isDark) {
     enableDarkTheme();
 } else {
@@ -30,15 +31,17 @@ function switchTheme() {
     }
 
     // Set localStorage value
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(isDark));
+    localStorage.setItem(THEME_LOCAL_STORAGE_KEY, JSON.stringify(isDark));
 }
 
 function enableDarkTheme() {
-    THEME_STYLE_LINK.setAttribute("href", DARK_THEME_PATH);
-    THEME_SWITCHER.innerHTML = "<i class='bi bi-moon'></i> Dark";
+    LIGHT_THEME_STYLE_LINK.setAttribute("rel", "stylesheet alternate");
+    DARK_THEME_STYLE_LINK.setAttribute("rel", "stylesheet");
+    THEME_SWITCHER_BUTTON.innerHTML = "<i class='bi bi-moon'></i> Dark";
 }
 
 function enableLightTheme() {
-    THEME_STYLE_LINK.setAttribute("href", LIGHT_THEME_PATH);
-    THEME_SWITCHER.innerHTML = "<i class='bi bi-sun'></i> Light";
+    DARK_THEME_STYLE_LINK.setAttribute("rel", "stylesheet alternate");
+    LIGHT_THEME_STYLE_LINK.setAttribute("rel", "stylesheet");
+    THEME_SWITCHER_BUTTON.innerHTML = "<i class='bi bi-sun'></i> Light";
 }
