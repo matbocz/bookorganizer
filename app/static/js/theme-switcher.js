@@ -21,6 +21,9 @@ if (isDark) {
     enableLightTheme();
 }
 
+// Add event listener to theme switch button
+THEME_SWITCH_BUTTON.addEventListener("click", switchTheme);
+
 function switchTheme() {
     // Switch theme
     isDark = !isDark;
