@@ -41,6 +41,11 @@
         </p>
         {% endif %}
 
+        <!-- Owner -->
+        <p>
+            Owner: <a href="{{ url_for('.user', username=book.owner.username) }}">{{ book.owner.username }}</a>
+        </p>
+
         <!-- Date added -->
         <p>
             Date added: {{ moment(book.date_added).format('LLL') }}
