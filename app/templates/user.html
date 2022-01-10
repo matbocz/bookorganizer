@@ -4,90 +4,101 @@
 {% block title %}Bookorganizer - {{ user.username }}{% endblock %}
 
 {% block content %}
-<!-- User information -->
-<div class="mb-3">
-    <!-- Username -->
-    <h1 class="display-1 mb-3">{{ user.username }}</h1>
+<div class="row mb-3">
+    <!-- User info column -->
+    <div class="col-sm-4 mb-3">
+        <!-- Username -->
+        <h1 class="display-1 mb-3">{{ user.username }}</h1>
 
-    <!-- Name and Location -->
-    {% if user.name or user.location %}
-    <p>
-        {% if user.name %}{{ user.name }}{% endif %}
-        {% if user.location %}
-        <a href="https://maps.google.com/?q={{ user.location }}">
-            {{ user.location }}
+        <!-- Name and Location -->
+        {% if user.name or user.location %}
+        <p>
+            {% if user.name %}{{ user.name }}{% endif %}
+            {% if user.location %}
+            <a href="https://maps.google.com/?q={{ user.location }}">
+                {{ user.location }}
+            </a>
+            {% endif %}
+        </p>
+        {% endif %}
+
+        <!-- Confirmed (if current user is administrator) -->
+        {% if current_user.is_administrator() %}
+        {% if user.confirmed == 1 %}
+        <p class="text-success">Confirmed user</p>
+        {% else %}
+        <p class="text-danger">Unconfirmed user</p>
+        {% endif %}
+        {% endif %}
+
+        <!-- Email (if current user is administrator) -->
+        {% if current_user.is_administrator() %}
+        <p>
+            <a href="mailto:{{ user.email }}">
+                {{ user.email }}
+            </a>
+        </p>
+        {% endif %}
+
+        <!-- About me -->
+        {% if user.about_me %}
+        <p>
+            {{ user.about_me }}
+        </p>
+        {% endif %}
+
+        <!-- Registration date and Last seen -->
+        <p>
+            Registration date: {{ moment(user.member_since).format('L') }}
+            Last seen: {{ moment(user.last_seen).fromNow() }}
+        </p>
+
+        <!-- Link to Edit Profile page -->
+        {% if user == current_user %}
+        <a class="btn btn-primary" href="{{ url_for('main.edit_profile') }}">
+            <i class="bi bi-pencil"></i> Edit profile
         </a>
         {% endif %}
-    </p>
-    {% endif %}
 
-    <!-- Confirmed (if current user is administrator) -->
-    {% if current_user.is_administrator() %}
-    {% if user.confirmed == 1 %}
-    <p class="text-success">Confirmed user</p>
-    {% else %}
-    <p class="text-danger">Unconfirmed user</p>
-    {% endif %}
-    {% endif %}
-
-    <!-- Email (if current user is administrator) -->
-    {% if current_user.is_administrator() %}
-    <p>
-        <a href="mailto:{{ user.email }}">
-            {{ user.email }}
+        <!-- Link to Edit Profile [Admin] page -->
+        {% if current_user.is_administrator() %}
+        <a class="btn btn-warning" href="{{ url_for('main.edit_profile_admin', id=user.id) }}">
+            <i class="bi bi-pencil"></i> Edit profile [Admin]
         </a>
-    </p>
-    {% endif %}
+        {% endif %}
 
-    <!-- About me -->
-    {% if user.about_me %}
-    <p>
-        {{ user.about_me }}
-    </p>
-    {% endif %}
+        <!-- Link to Add Book page (if no books) -->
+        {% if ( (user == current_user) and (not books) ) %}
+        <a class="btn btn-success" href="{{ url_for('main.add_book') }}">
+            <i class="bi bi-plus"></i> Add book
+        </a>
+        {% endif %}
+    </div>
 
-    <!-- Registration date and Last seen -->
-    <p>
-        Registration date: {{ moment(user.member_since).format('L') }}
-        Last seen: {{ moment(user.last_seen).fromNow() }}
-    </p>
+    <!-- User books column -->
+    {% if books %}
+    <div class="col-sm-8">
+        <!-- Books header -->
+        <div class="d-flex justify-content-between align-items-center">
+            <!-- Text -->
+            <h2 class="mb-3">Books</h2>
 
-    <!-- Link to Add Book page -->
-    {% if user == current_user %}
-    <a class="btn btn-success" href="{{ url_for('main.add_book') }}">
-        <i class="bi bi-plus"></i> Add book
-    </a>
-    {% endif %}
+            <!-- Link to Add Book page -->
+            {% if user == current_user %}
+            <a class="btn btn-success mb-3" href="{{ url_for('main.add_book') }}">
+                <i class="bi bi-plus"></i> Add book
+            </a>
+            {% endif %}
+        </div>
 
-    <!-- Link to Edit Profile page -->
-    {% if user == current_user %}
-    <a class="btn btn-primary" href="{{ url_for('main.edit_profile') }}">
-        <i class="bi bi-pencil"></i> Edit profile
-    </a>
-    {% endif %}
+        <!-- Books list -->
+        <div class="mb-3">
+            {% include '_books.html' %}
+        </div>
 
-    <!-- Link to Edit Profile [Admin] page -->
-    {% if current_user.is_administrator() %}
-    <a class="btn btn-warning" href="{{ url_for('main.edit_profile_admin', id=user.id) }}">
-        <i class="bi bi-pencil"></i> Edit profile [Admin]
-    </a>
+        <!-- Books pagination -->
+        {{ macros.pagination_widget(pagination, 'main.user', username=user.username) }}
+    </div>
     {% endif %}
 </div>
-
-<!-- User's books -->
-{% if books %}
-<!-- Books list -->
-<div class="mb-3">
-    <!-- Header -->
-    <h2 class="mb-3">Books</h2>
-
-    <!-- List -->
-    {% include '_books.html' %}
-</div>
-
-<!-- Pagination -->
-<div class="mb-3">
-    {{ macros.pagination_widget(pagination, 'main.user', username=user.username) }}
-</div>
-{% endif %}
 {% endblock %}
