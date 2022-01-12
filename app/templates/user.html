@@ -16,7 +16,7 @@
             {% if user.name %}{{ user.name }}{% endif %}
             {% if user.location %}
             <a href="https://maps.google.com/?q={{ user.location }}">
-                {{ user.location }}
+                <i class="bi bi-geo-alt"></i> {{ user.location }}
             </a>
             {% endif %}
         </p>
@@ -25,9 +25,13 @@
         <!-- Confirmed (if current user is administrator) -->
         {% if current_user.is_administrator() %}
         {% if user.confirmed == 1 %}
-        <p class="text-success">Confirmed user</p>
+        <p class="text-success">
+            <i class="bi bi-person-check"></i> Confirmed user
+        </p>
         {% else %}
-        <p class="text-danger">Unconfirmed user</p>
+        <p class="text-danger">
+            <i class="bi bi-person-x"></i> Unconfirmed user
+        </p>
         {% endif %}
         {% endif %}
 
@@ -35,7 +39,7 @@
         {% if current_user.is_administrator() %}
         <p>
             <a href="mailto:{{ user.email }}">
-                {{ user.email }}
+                <i class="bi bi-envelope"></i> {{ user.email }}
             </a>
         </p>
         {% endif %}
@@ -49,8 +53,8 @@
 
         <!-- Registration date and Last seen -->
         <p>
-            Registration date: {{ moment(user.member_since).format('L') }}
-            Last seen: {{ moment(user.last_seen).fromNow() }}
+            <i class="bi bi-calendar-event"></i> Registration date: {{ moment(user.member_since).format('L') }}
+            <i class="bi bi-clock"></i> Last seen: {{ moment(user.last_seen).fromNow() }}
         </p>
 
         <!-- Link to Edit Profile page -->
