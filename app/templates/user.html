@@ -8,17 +8,21 @@
     <!-- User info column -->
     <div class="col-sm-4 mb-3">
         <!-- Username -->
-        <h1 class="display-1 mb-3">{{ user.username }}</h1>
+        <h2>{{ user.username }}</h2>
 
-        <!-- Name and Location -->
-        {% if user.name or user.location %}
+        <!-- Name -->
+        {% if user.name %}
+        <p class="fst-italic">
+            {{ user.name }}
+        </p>
+        {% endif %}
+
+        <!-- Location -->
+        {% if user.location %}
         <p>
-            {% if user.name %}{{ user.name }}{% endif %}
-            {% if user.location %}
             <a href="https://maps.google.com/?q={{ user.location }}">
                 <i class="bi bi-geo-alt"></i> {{ user.location }}
             </a>
-            {% endif %}
         </p>
         {% endif %}
 
@@ -54,6 +58,7 @@
         <!-- Registration date and Last seen -->
         <p>
             <i class="bi bi-calendar-event"></i> Registration date: {{ moment(user.member_since).format('L') }}
+            <br>
             <i class="bi bi-clock"></i> Last seen: {{ moment(user.last_seen).fromNow() }}
         </p>
 
