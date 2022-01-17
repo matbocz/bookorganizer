@@ -17,9 +17,9 @@
                     <h3 class="mb-1">{{ book.title }}</h3>
                     <small class="text-muted">{{ moment(book.date_modified).format('LLL') }}</small>
                 </div>
-                <div class="d-flex justify-content-between">
-                    <p><em>{{ book.author }}</em></p>
-                    <small class="text-muted"> {{ book.owner.username }}</small>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="fst-italic">{{ book.author }}</span>
+                    <span class="badge rounded-pill bg-info">{{ book.owner.username }}</span>
                 </div>
                 <p>{{ book.description }}</p>
             </div>
