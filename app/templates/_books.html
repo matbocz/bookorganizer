@@ -5,7 +5,7 @@
         <div class="row">
             <!-- Book's cover -->
             {% if book.cover %}
-            <div class="col-sm-2 text-center">
+            <div class="col-sm-2 text-center mb-3">
                 <img class="mw-100 rounded" src="{{ url_for('static', filename=book.get_cover_file_url()) }}"
                      alt="Cover">
             </div>
