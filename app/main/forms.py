@@ -35,6 +35,10 @@ class EditBookForm(FlaskForm):
                      validators=[FileAllowed(allowedFiles, f'File must have {", ".join(allowedFiles)} extension.')])
 
 
+class SearchBookForm(FlaskForm):
+    title = StringField('Title')
+
+
 class EditProfileForm(FlaskForm):
     name = StringField('Name',
                        validators=[Length(min=0, max=64,
