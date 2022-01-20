@@ -6,17 +6,24 @@ from werkzeug.utils import redirect
 
 from config import staticdir
 from . import main
-from .forms import EditProfileForm, EditProfileAdminForm, AddBookForm, EditBookForm
+from .forms import EditProfileForm, EditProfileAdminForm, AddBookForm, EditBookForm, SearchBookForm
 from .. import db
 from ..decorators import admin_required
 from ..models import User, Role, Book
 
 
-@main.route('/')
+@main.route('/', methods=['GET', 'POST'])
 def index():
     # Get URL parameters
     page = request.args.get(key='page', default=1, type=int)
     search = request.args.get(key='search', default="", type=str)
+
+    # Handle SearchBookForm
+    form = SearchBookForm()
+    if form.is_submitted():
+        search = form.title.data
+
+        return redirect(url_for('main.index', search=search))
 
     # Get books from database
     pagination = Book.query.filter(Book.title.like(f'%{search}%')) \
@@ -25,7 +32,7 @@ def index():
     books = pagination.items
 
     # Render index page
-    return render_template('index.html', pagination=pagination, books=books, search=search)
+    return render_template('index.html', pagination=pagination, books=books, search=search, form=form)
 
 
 @main.route('/user/<username>')
