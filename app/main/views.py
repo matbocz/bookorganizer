@@ -14,14 +14,18 @@ from ..models import User, Role, Book
 
 @main.route('/')
 def index():
-    # Pagination (All books)
+    # Get URL parameters
     page = request.args.get(key='page', default=1, type=int)
-    pagination = Book.query.order_by(Book.date_modified.desc()).paginate(page=page,
-                                                                         per_page=current_app.config['BOOKS_PER_PAGE'],
-                                                                         error_out=False)
+    search = request.args.get(key='search', default="", type=str)
+
+    # Get books from database
+    pagination = Book.query.filter(Book.title.like(f'%{search}%')) \
+        .order_by(Book.date_modified.desc()) \
+        .paginate(page=page, per_page=current_app.config['BOOKS_PER_PAGE'], error_out=False)
     books = pagination.items
 
-    return render_template('index.html', pagination=pagination, books=books)
+    # Render index page
+    return render_template('index.html', pagination=pagination, books=books, search=search)
 
 
 @main.route('/user/<username>')
