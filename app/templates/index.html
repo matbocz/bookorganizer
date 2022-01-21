@@ -23,6 +23,14 @@
     <!-- Header -->
     <h2 class="mb-3">Recently added books</h2>
 
+    <!-- Search bar -->
+    <form class="mb-3" method="post">
+        <div class="input-group">
+            {{ form.title(class='form-control', value=search) }}
+            <button class="btn btn-outline-info" type="submit"><i class="bi bi-search"></i> Search</button>
+        </div>
+    </form>
+
     <!-- List -->
     {% include '_books.html' %}
 </div>
