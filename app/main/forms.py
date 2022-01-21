@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
-from wtforms import StringField, SubmitField, TextAreaField, SelectField, FileField
+from wtforms import StringField, TextAreaField, SelectField, FileField
+from wtforms.fields.html5 import SearchField
 from wtforms.validators import Length, DataRequired, Email, Regexp, ValidationError
 
 from app.models import Role, User
@@ -36,7 +37,7 @@ class EditBookForm(FlaskForm):
 
 
 class SearchBookForm(FlaskForm):
-    title = StringField('Title')
+    title = SearchField('Title')
 
 
 class EditProfileForm(FlaskForm):
