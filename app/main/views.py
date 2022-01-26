@@ -35,7 +35,7 @@ def index():
     return render_template('index.html', pagination=pagination, books=books, search=search, form=form)
 
 
-@main.route('/user/<username>')
+@main.route('/user/<username>', methods=['GET', 'POST'])
 def user(username):
     # Get URL parameters
     page = request.args.get(key='page', default=1, type=int)
@@ -44,6 +44,13 @@ def user(username):
     # Get user from database
     user = User.query.filter_by(username=username).first_or_404()
 
+    # Handle SearchBookForm
+    form = SearchBookForm()
+    if form.is_submitted():
+        search = form.title.data
+
+        return redirect(url_for('main.user', username=user.username, search=search))
+
     # Get books from database
     pagination = Book.query.filter(Book.title.like(f'%{search}%'), Book.owner_id == user.id) \
         .order_by(Book.date_modified.desc()) \
@@ -51,7 +58,7 @@ def user(username):
     books = pagination.items
 
     # Render user page
-    return render_template('user.html', user=user, pagination=pagination, books=books, search=search)
+    return render_template('user.html', user=user, pagination=pagination, books=books, search=search, form=form)
 
 
 @main.route('/book/<int:id>')
