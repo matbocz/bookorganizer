@@ -37,18 +37,21 @@ def index():
 
 @main.route('/user/<username>')
 def user(username):
-    # Get selected user from database
+    # Get URL parameters
+    page = request.args.get(key='page', default=1, type=int)
+    search = request.args.get(key='search', default="", type=str)
+
+    # Get user from database
     user = User.query.filter_by(username=username).first_or_404()
 
-    # Pagination (Selected user's books)
-    page = request.args.get(key='page', default=1, type=int)
-    pagination = user.books.order_by(Book.date_modified.desc()).paginate(page=page,
-                                                                         per_page=current_app.config['BOOKS_PER_PAGE'],
-                                                                         error_out=False)
+    # Get books from database
+    pagination = Book.query.filter(Book.title.like(f'%{search}%'), Book.owner_id == user.id) \
+        .order_by(Book.date_modified.desc()) \
+        .paginate(page=page, per_page=current_app.config['BOOKS_PER_PAGE'], error_out=False)
     books = pagination.items
 
-    # Render selected user page
-    return render_template('user.html', user=user, pagination=pagination, books=books)
+    # Render user page
+    return render_template('user.html', user=user, pagination=pagination, books=books, search=search)
 
 
 @main.route('/book/<int:id>')

@@ -106,7 +106,9 @@
         </div>
 
         <!-- Books pagination -->
-        {{ macros.pagination_widget(pagination, 'main.user', username=user.username) }}
+        {% if search %}{{ macros.pagination_widget(pagination, 'main.user', username=user.username, search=search) }}
+        {% else %}{{ macros.pagination_widget(pagination, 'main.user', username=user.username) }}
+        {% endif %}
     </div>
     {% endif %}
 </div>
