@@ -62,25 +62,30 @@
             <i class="bi bi-clock"></i> Last seen: {{ moment(user.last_seen).fromNow() }}
         </p>
 
-        <!-- Link to Edit Profile page -->
-        {% if user == current_user %}
-        <a class="btn btn-primary" href="{{ url_for('main.edit_profile') }}">
-            <i class="bi bi-pencil"></i> Edit profile
-        </a>
-        {% endif %}
+        <!-- Links -->
+        {% if ( (user == current_user) or (current_user.is_administrator()) ) %}
+        <div class="mb-3">
+            <!-- Link to Edit Profile page -->
+            {% if user == current_user %}
+            <a class="btn btn-primary" href="{{ url_for('main.edit_profile') }}">
+                <i class="bi bi-pencil"></i> Edit profile
+            </a>
+            {% endif %}
 
-        <!-- Link to Edit Profile [Admin] page -->
-        {% if current_user.is_administrator() %}
-        <a class="btn btn-warning" href="{{ url_for('main.edit_profile_admin', id=user.id) }}">
-            <i class="bi bi-pencil"></i> Edit profile [Admin]
-        </a>
-        {% endif %}
+            <!-- Link to Edit Profile [Admin] page -->
+            {% if current_user.is_administrator() %}
+            <a class="btn btn-warning" href="{{ url_for('main.edit_profile_admin', id=user.id) }}">
+                <i class="bi bi-pencil"></i> Edit profile [Admin]
+            </a>
+            {% endif %}
 
-        <!-- Link to Add Book page (if no books) -->
-        {% if ( (user == current_user) and (not books) ) %}
-        <a class="btn btn-success" href="{{ url_for('main.add_book') }}">
-            <i class="bi bi-plus"></i> Add book
-        </a>
+            <!-- Link to Add Book page (if no books) -->
+            {% if ( (user == current_user) and (not books) ) %}
+            <a class="btn btn-success" href="{{ url_for('main.add_book') }}">
+                <i class="bi bi-plus"></i> Add book
+            </a>
+            {% endif %}
+        </div>
         {% endif %}
     </div>
 
