@@ -33,5 +33,11 @@
     {% else %}{{ macros.pagination_widget(pagination, 'main.index') }}
     {% endif %}
 </div>
+
+<!-- No books message -->
+{% elif search %}
+{% include '_no_books_search.html' ignore missing %}
+{% else %}
+{% include '_no_books.html' ignore missing %}
 {% endif %}
 {% endblock %}
